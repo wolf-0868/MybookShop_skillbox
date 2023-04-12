@@ -1,19 +1,33 @@
 package com.example.bookshop.data;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
-@Builder
+import javax.persistence.*;
+
+@Table(name = "author")
+@Entity
 @Getter
 @Setter
-@ToString
-@Accessors(prefix = "_")
+@NoArgsConstructor
 public class Author {
 
-    private Integer _id;
-    private String _fullname;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "description")
+    private String description;
+
+    public String getFullname() {
+        return firstname + " " + lastname;
+    }
 
 }

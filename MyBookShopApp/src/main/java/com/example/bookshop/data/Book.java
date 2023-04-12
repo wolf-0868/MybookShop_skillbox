@@ -1,36 +1,53 @@
 package com.example.bookshop.data;
 
-import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.Accessors;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 
-@Builder
+@Table(name = "book")
+@Entity
 @Getter
 @Setter
-@ToString
-@Accessors(prefix = "_")
+@NoArgsConstructor
 public class Book {
 
     public static final String RUB_SIMBOL = "\u0584";
 
-    private Integer _id;
-    private Author _author;
-    private LocalDate _pubDate;
-    private boolean _bestseller;
-    private String _title;
-    private Integer _price;
-    private Integer _discount;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    private Author author;
+
+    @Column(name = "pub_date", columnDefinition = "DATE")
+    private LocalDate pubDate;
+
+    @Column(name = "is_bestseller")
+    private boolean bestseller;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "price")
+    private Integer price;
+
+    @Column(name = "discount")
+    private Integer discount;
 
     public Integer getCurrentPrice() {
-        return _price - (int) (((double) _price) / 100 * _discount);
+        return price - (int) (((double) price) / 100 * discount);
     }
 
     public String getPriceText() {
-        return RUB_SIMBOL + _price;
+        return RUB_SIMBOL + price;
     }
 
     public String getCurrentPriceText() {
@@ -38,7 +55,8 @@ public class Book {
     }
 
     public boolean isBigDiscount() {
-        return _discount >= 30;
+        return discount >= 30;
     }
+
 
 }

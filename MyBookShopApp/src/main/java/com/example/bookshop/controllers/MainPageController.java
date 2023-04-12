@@ -13,11 +13,11 @@ import java.util.List;
 @Controller
 public class MainPageController {
 
-    private final BookService _bookService;
+    private final BookService bookService;
 
     @Autowired
     public MainPageController(BookService aBookService) {
-        _bookService = aBookService;
+        bookService = aBookService;
     }
 
     @ModelAttribute("activePage")
@@ -27,17 +27,17 @@ public class MainPageController {
 
     @ModelAttribute("recommendedBooks")
     public List<Book> recommendedBooks() {
-        return  _bookService.getBooksData();
+        return  bookService.getAllBooks();
     }
 
     @ModelAttribute("recentBooks")
     public List<Book> recentBooks() {
-        return _bookService.getRecentBooks();
+        return bookService.getRecentBooks();
     }
 
     @ModelAttribute("popularBooks")
     public List<Book> popularBooks() {
-        List<Book> list = _bookService.getPupularBooks();
+        List<Book> list = bookService.getPupularBooks();
         return list;
     }
 

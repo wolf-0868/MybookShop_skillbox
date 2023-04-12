@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
 @Controller
 public class AuthorPageController {
 
-    private final AuthorService _authorService;
+    private final AuthorService authorService;
 
     @Autowired
     public AuthorPageController(AuthorService aAuthorService) {
-        _authorService = aAuthorService;
+        authorService = aAuthorService;
     }
 
     @ModelAttribute("activePage")
@@ -28,7 +28,7 @@ public class AuthorPageController {
 
     @ModelAttribute("authorMap")
     public Map<String, List<Author>> authorMap() {
-        return _authorService.getAuthorsData()
+        return authorService.getAllAuthors()
                 .stream()
                 .collect(Collectors.groupingBy(a -> a.getFullname().substring(0, 1)));
     }
