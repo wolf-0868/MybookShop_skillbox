@@ -20,8 +20,8 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "author_id", foreignKey = @ForeignKey(name = "author_fk"))
     private Author author;
 
     @Column(name = "pub_date", columnDefinition = "DATE")
