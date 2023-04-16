@@ -1,6 +1,6 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.data.Book;
+import com.example.bookshop.data.BookEntity;
 import com.example.bookshop.repositoryes.IBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,16 +18,17 @@ public class BookService {
         _repository = aRepository;
     }
 
-    public List<Book> getAllBooks() {
+    public List<BookEntity> getAllBooks() {
         return _repository.findAll();
     }
 
-    public List<Book> getPupularBooks() {
+    public List<BookEntity> getPupularBooks() {
         return _repository.findBooksByBestsellerIsTrue();
     }
 
-    public List<Book> getRecentBooks() {
-        return _repository.findBooksByPubDateIsAfter(LocalDate.now().minusYears(3));
+    public List<BookEntity> getRecentBooks() {
+        return _repository.findBooksByPubDateIsAfter(LocalDate.now()
+                .minusYears(3));
     }
 
 }

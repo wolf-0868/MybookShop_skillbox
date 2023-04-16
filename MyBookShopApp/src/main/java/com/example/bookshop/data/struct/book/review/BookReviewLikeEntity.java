@@ -1,65 +1,37 @@
 package com.example.bookshop.data.struct.book.review;
 
+import com.example.bookshop.data.struct.user.UserEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
 @Table(name = "book_review_like")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class BookReviewLikeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int reviewId;
+    @ManyToOne
+    @JoinColumn(name = "review_id", foreignKey = @ForeignKey(name = "book_review_like_review_fk"), nullable = false)
+    private BookReviewEntity review;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "book_review_like_user_fk"), nullable = false)
+    private UserEntity user;
 
-    @Column(columnDefinition = "TIMESTAMP NOT NULL")
+    @Column(name = "datetime", columnDefinition = "TIMESTAMP WITH TIME ZONE", nullable = false)
     private LocalDateTime time;
 
-    @Column(columnDefinition = "SMALLINT NOT NULL")
-    private short value;
+    @Column(name = "value", columnDefinition = "SMALLINT", nullable = false)
+    private Short value;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(int reviewId) {
-        this.reviewId = reviewId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public LocalDateTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalDateTime time) {
-        this.time = time;
-    }
-
-    public short getValue() {
-        return value;
-    }
-
-    public void setValue(short value) {
-        this.value = value;
-    }
 }

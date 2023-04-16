@@ -1,42 +1,26 @@
 package com.example.bookshop.data.struct.book.links;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-@Entity
 @Table(name = "book2user_type")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Book2UserTypeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

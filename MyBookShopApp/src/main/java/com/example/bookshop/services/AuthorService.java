@@ -1,6 +1,6 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.data.Author;
+import com.example.bookshop.data.AuthorEntity;
 import com.example.bookshop.repositoryes.IAuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ public class AuthorService {
         repository = aRepository;
     }
 
-    public List<Author> getAllAuthors() {
+    public List<AuthorEntity> getAllAuthors() {
         return repository.findAll();
     }
 

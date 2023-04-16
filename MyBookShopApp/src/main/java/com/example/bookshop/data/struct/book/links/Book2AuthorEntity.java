@@ -1,53 +1,33 @@
 package com.example.bookshop.data.struct.book.links;
 
+import com.example.bookshop.data.AuthorEntity;
+import com.example.bookshop.data.BookEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-@Entity
 @Table(name = "book2author")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Book2AuthorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int bookId;
+    @ManyToOne
+    @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "book2author_book_fk"), nullable = false)
+    private BookEntity book;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int authorId;
+    @ManyToOne
+    @JoinColumn(name = "author_id", foreignKey = @ForeignKey(name = "book2author_author_fk"), nullable = false)
+    private AuthorEntity author;
 
-    @Column(columnDefinition = "INT NOT NULL  DEFAULT 0")
-    private int sortIndex;
+    @Column(name = "sort_index", nullable = false)
+    private Integer sortIndex = 0;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
-    public int getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
-    public int getSortIndex() {
-        return sortIndex;
-    }
-
-    public void setSortIndex(int sortIndex) {
-        this.sortIndex = sortIndex;
-    }
 }

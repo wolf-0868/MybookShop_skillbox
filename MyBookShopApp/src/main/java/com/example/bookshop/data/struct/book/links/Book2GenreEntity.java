@@ -1,18 +1,30 @@
 package com.example.bookshop.data.struct.book.links;
 
+import com.example.bookshop.data.BookEntity;
+import com.example.bookshop.data.struct.genre.GenreEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-@Entity
 @Table(name = "book2genre")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Book2GenreEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int bookId;
+    @ManyToOne
+    @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "book2genre_book_fk"), nullable = false)
+    private BookEntity book;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int genreId;
+    @ManyToOne
+    @JoinColumn(name = "genre_id", foreignKey = @ForeignKey(name = "book2genre_genre_fk"), nullable = false)
+    private GenreEntity genre;
+
 }

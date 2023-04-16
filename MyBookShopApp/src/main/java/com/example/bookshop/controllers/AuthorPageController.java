@@ -1,6 +1,6 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.data.Author;
+import com.example.bookshop.data.AuthorEntity;
 import com.example.bookshop.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +27,7 @@ public class AuthorPageController {
     }
 
     @ModelAttribute("authorMap")
-    public Map<String, List<Author>> authorMap() {
+    public Map<String, List<AuthorEntity>> authorMap() {
         return authorService.getAllAuthors()
                 .stream()
                 .collect(Collectors.groupingBy(a -> a.getFullname().substring(0, 1)));

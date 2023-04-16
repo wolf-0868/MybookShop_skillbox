@@ -1,53 +1,33 @@
 package com.example.bookshop.data.struct.book.file;
 
+import com.example.bookshop.data.BookEntity;
+import com.example.bookshop.data.struct.user.UserEntity;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-@Entity
 @Table(name = "file_download")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class FileDownloadEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "file_download_book_fk"), nullable = false)
+    private BookEntity book;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int bookId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "file_download_user_fk"), nullable = false)
+    private UserEntity user;
 
-    @Column(columnDefinition = "INT NOT NULL DEFAULT 1")
-    private int count;
+    @Column(name = "count", nullable = false)
+    private Integer count = 1;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public int getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
 }

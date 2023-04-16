@@ -11,19 +11,19 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BookFile {
+public class BookFileEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "hash")
+    @Column(name = "hash", nullable = false)
     private String hash;
 
-    @Column(name = "type_id")
+    @Column(name = "type_id", nullable = false)
     private Long _typeId;
 
-    @Column(name = "path")
+    @Column(name = "path", nullable = false)
     private String path;
 
 }

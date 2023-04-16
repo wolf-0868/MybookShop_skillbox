@@ -2,99 +2,45 @@ package com.example.bookshop.data.struct.user;
 
 
 import com.example.bookshop.data.struct.enums.ContactType;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
 @Table(name = "user_contact")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserContactEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(columnDefinition = "INT NOT NULL")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "user_contact_iser_fk"), nullable = false)
+    private UserEntity user;
 
+    @Column(name = "type")
+    @Enumerated(EnumType.ORDINAL)
     private ContactType type;
 
-    @Column(columnDefinition = "SMALLINT NOT NULL")
-    private short approved;
+    @Column(name = "approved", columnDefinition = "SMALLINT", nullable = false)
+    private Short approved;
 
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "code", nullable = false)
     private String code;
 
-    @Column(columnDefinition = "INT")
-    private int codeTrails;
+    @Column(name = "code_trails")
+    private Integer codeTrails;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    private LocalDateTime codeTime;
+    @Column(name = "code_datetime", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private LocalDateTime codeDatetime;
 
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "contact", nullable = false)
     private String contact;
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-
-    public ContactType getType() {
-        return type;
-    }
-
-    public void setType(ContactType type) {
-        this.type = type;
-    }
-
-    public short getApproved() {
-        return approved;
-    }
-
-    public void setApproved(short approved) {
-        this.approved = approved;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public int getCodeTrails() {
-        return codeTrails;
-    }
-
-    public void setCodeTrails(int codeTrails) {
-        this.codeTrails = codeTrails;
-    }
-
-    public LocalDateTime getCodeTime() {
-        return codeTime;
-    }
-
-    public void setCodeTime(LocalDateTime codeTime) {
-        this.codeTime = codeTime;
-    }
-
-    public String getContact() {
-        return contact;
-    }
-
-    public void setContact(String contact) {
-        this.contact = contact;
-    }
 }

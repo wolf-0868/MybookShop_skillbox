@@ -1,53 +1,31 @@
 package com.example.bookshop.data.struct.genre;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 
-@Entity
 @Table(name = "genre")
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class GenreEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(columnDefinition = "INT")
-    private int parentId;
+    @ManyToOne
+    @JoinColumn(name = "parent_id", foreignKey = @ForeignKey(name = "genre_parent_fk"))
+    private GenreEntity parent;
 
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "slug", nullable = false)
     private String slug;
 
-    @Column(columnDefinition = "VARCHAR(255) NOT NULL")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getParentId() {
-        return parentId;
-    }
-
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }
