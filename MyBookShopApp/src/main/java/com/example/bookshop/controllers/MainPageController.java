@@ -1,17 +1,16 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.data.BookEntity;
 import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-public class MainPageController {
+@RequestMapping(value = "/", method = RequestMethod.GET)
+public class MainPageController extends AbstractPageController {
 
     private final BookService bookService;
 
@@ -20,33 +19,16 @@ public class MainPageController {
         bookService = aBookService;
     }
 
-    @ModelAttribute("activePage")
-    public ActivePageType activePage() {
-        return ActivePageType.MAIN;
+    @Override
+    public void addAttributes(Model aModel) {
+        super.addAttributes(aModel);
+        aModel.addAttribute("recommendedBooks", bookService.getAllBooks());
+        aModel.addAttribute("recentBooks", bookService.getRecentBooks());
+        aModel.addAttribute("popularBooks", bookService.getPupularBooks());
     }
 
-    @ModelAttribute("recommendedBooks")
-    public List<BookEntity> recommendedBooks() {
-        List<BookEntity> allBooks = bookService.getAllBooks();
-        return allBooks;
-    }
-
-    @ModelAttribute("recentBooks")
-    public List<BookEntity> recentBooks() {
-        return bookService.getRecentBooks();
-    }
-
-    @ModelAttribute("popularBooks")
-    public List<BookEntity> popularBooks() {
-        List<BookEntity> list = bookService.getPupularBooks();
-        return list;
-    }
-
-    @GetMapping({"/", "/index.html"})
+    @GetMapping(value = {"", "/index"})
     public String mainPage(Model aModel) {
-//        aModel.addAttribute("recommendedBooks", _bookService.getBooksData());
-//        aModel.addAttribute("recentBooks",  _bookService.getRecentBooks());
-//        aModel.addAttribute("popularBooks", _bookService.getPupularBooks());
         return "index";
     }
 

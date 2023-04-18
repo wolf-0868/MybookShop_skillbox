@@ -1,34 +1,48 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.data.BookEntity;
-import com.example.bookshop.repositoryes.IBookRepository;
+import com.example.bookshop.model.Book;
+import com.example.bookshop.repositories.IBookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
 
-    private IBookRepository _repository;
+    private IBookRepository repository;
 
     @Autowired
     public BookService(IBookRepository aRepository) {
-        _repository = aRepository;
+        repository = aRepository;
     }
 
-    public List<BookEntity> getAllBooks() {
-        return _repository.findAll();
+    public List<Book> getAllBooks() {
+        return repository.findAll().stream()
+                .map(Book::of)
+                .collect(Collectors.toList());
     }
 
-    public List<BookEntity> getPupularBooks() {
-        return _repository.findBooksByBestsellerIsTrue();
+    public List<Book> getPupularBooks() {
+        return repository.findBooksByBestsellerIsTrue().stream()
+                .map(Book::of)
+                .collect(Collectors.toList());
     }
 
-    public List<BookEntity> getRecentBooks() {
-        return _repository.findBooksByPubDateIsAfter(LocalDate.now()
-                .minusYears(3));
+    public List<Book> getRecentBooks() {
+        return repository.findBooksByPubDateIsAfter(LocalDate.now()
+                .minusYears(3)).stream()
+                .map(Book::of)
+                .collect(Collectors.toList());
+    }
+
+    public Page<Book> getPageOfSearchResultBooks(String aSearchWord, Integer aOffset, Integer aLimit) {
+        return repository.findBookByTitleContaining(aSearchWord, PageRequest.of(aOffset, aLimit))
+                .map(Book::of);
     }
 
 }

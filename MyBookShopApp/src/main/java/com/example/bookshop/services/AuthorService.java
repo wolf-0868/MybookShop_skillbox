@@ -1,11 +1,12 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.data.AuthorEntity;
-import com.example.bookshop.repositoryes.IAuthorRepository;
+import com.example.bookshop.model.Author;
+import com.example.bookshop.repositories.IAuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthorService {
@@ -17,8 +18,11 @@ public class AuthorService {
         repository = aRepository;
     }
 
-    public List<AuthorEntity> getAllAuthors() {
-        return repository.findAll();
+    public List<Author> getAllAuthors() {
+        return repository.findAll()
+                .stream()
+                .map(Author::of)
+                .collect(Collectors.toList());
     }
 
 }

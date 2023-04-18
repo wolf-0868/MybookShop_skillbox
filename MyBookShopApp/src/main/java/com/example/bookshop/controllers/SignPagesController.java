@@ -4,14 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class SignPagesController {
+public class SignPagesController extends AbstractPageController {
 
-    @GetMapping({"/signin", "/signin.html"})
+    @GetMapping(value = "/signin")
     public String signInPage() {
         return "signin";
     }
 
-    @GetMapping({"/signup", "signup.html"})
+    @GetMapping(value = "/signup")
     public String signUp() {
         return "signup";
     }
