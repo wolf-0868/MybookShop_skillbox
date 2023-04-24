@@ -1,5 +1,6 @@
 package com.example.bookshop.data.entities;
 
+import com.example.bookshop.data.entities.genre.GenreEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,18 +17,23 @@ import java.util.Set;
 @NoArgsConstructor
 public class BookEntity {
 
-    public static final String RUB_SIMBOL = "\u0584";
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(
             name = "book2author",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<AuthorEntity> authors = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "book2genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    private Set<GenreEntity> genres = new HashSet<>();
 
     @Column(name = "pub_date", columnDefinition = "DATE", nullable = false)
     private LocalDate pubDate;

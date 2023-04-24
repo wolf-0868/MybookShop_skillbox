@@ -1,4 +1,4 @@
-package com.example.bookshop.model;
+package com.example.bookshop.data.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchWordModel {
+public class SearchWordDTO {
 
     private String example;
 

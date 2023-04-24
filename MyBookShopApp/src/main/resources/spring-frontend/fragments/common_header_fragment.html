@@ -26,7 +26,7 @@
           <div class="Header-search">
             <div class="search">
               <form action="#" class="form form_search" data-searchlimit="20" method="post"
-                    th:object="${searchWordModel}">
+                    th:object="${searchWordDTO}">
                 <input class="search-input" id="query" name="query" placeholder="Search over 30 million book titles"
                        th:field="*{example}" th:placeholder="#{searchbar.placeholder}" type="text" value=""/>
                 <button class="search-button" id="search" name="search" th:text="#{toolbar.search}" type="submit">

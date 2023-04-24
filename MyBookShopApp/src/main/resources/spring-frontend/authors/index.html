@@ -38,7 +38,8 @@
                 th:text="${entry.getKey()}">A</h2>
             <div class="Authors-letter">
               <div class="Authors-item" th:each="author : ${entry.getValue()}">
-                <a href="/authors/slug.html" th:text="${author.getFullname()}"></a>
+                <a href="/authors/slug.html" th:href="'/authors/' + ${author.getSlug()}"
+                   th:text="${author.getFullname()}"></a>
               </div>
             </div>
           </div>

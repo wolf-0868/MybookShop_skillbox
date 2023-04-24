@@ -1,18 +1,14 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.data.entities.BookEntity;
-import com.example.bookshop.model.SearchWordModel;
+import com.example.bookshop.data.dto.BooksPageDTO;
+import com.example.bookshop.data.dto.SearchWordDTO;
 import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/search")
@@ -25,19 +21,24 @@ public class SearchPageController extends AbstractPageController {
         bookService = aBookService;
     }
 
-    @ModelAttribute("searchResult")
-    public List<BookEntity> searchResult() {
-        return new ArrayList<>();
-    }
-
     @GetMapping(value = {"", "/{searchWord}"})
-    public String searchPage(@PathVariable(value = "searchWord", required = false) SearchWordModel aSearchWord, Model aModel) {
-        if (aSearchWord != null) {
-            aModel.addAttribute("searchWordModel", aSearchWord);
-            aModel.addAttribute("searchResult", bookService.getPageOfSearchResultBooks(aSearchWord.getExample(), 0, 20)
-                    .getContent());
+    public String searchPage(@PathVariable(value = "searchWord", required = false) SearchWordDTO aSearchWord, Model aModel) {
+        if (aSearchWord == null) {
+            aModel.addAttribute("searchResult", new ArrayList<>());
+        } else {
+            aModel.addAttribute("searchWordDTO", aSearchWord);
+            aModel.addAttribute("searchResult", bookService.getPageOfSearchResultBooks(aSearchWord.getExample(), 0, 20));
         }
         return "search/index";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/page/{searchWord}")
+    public BooksPageDTO getNextSearchPage(
+            @RequestParam("offset") Integer aOffset,
+            @RequestParam("limit") Integer aLimit,
+            @PathVariable(value = "searchWord", required = false) SearchWordDTO aSearchWord) {
+        return new BooksPageDTO(bookService.getPageOfSearchResultBooks(aSearchWord.getExample(), aOffset, aLimit));
     }
 
 }

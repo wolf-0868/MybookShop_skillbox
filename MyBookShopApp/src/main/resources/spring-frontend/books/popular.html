@@ -41,7 +41,7 @@
           <div class="Card" th:each="book : ${popularBooks}">
             <div class="Card-picture">
               <a href="#">
-                <img alt="card.jpg" src="/assets/img/content/main/card.jpg"/>
+                <img alt="card.jpg" src="/assets/img/content/main/card.jpg" th:src="${book.getImage()}"/>
               </a>
               <div class="Card-sale"
                    th:if="${book.isBigDiscount()}"
@@ -58,7 +58,7 @@
               <div class="Card-description" th:text="${book.getAuthorsText()}">Кондратенко Александр Петрович</div>
               <div class="Card-cost">
                 <span class="Card-priceOld" th:text="${book.getPriceText()}">₽300.00</span>
-                <span class="Card-price" th:text="${book.getCurrentPriceText()}">₽190.00</span>
+                <span class="Card-price" th:text="${book.getDiscountPriceText()}">₽190.00</span>
               </div>
             </div>
           </div>

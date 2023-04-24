@@ -1,48 +1,65 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.model.Book;
-import com.example.bookshop.repositories.IBookRepository;
+import com.example.bookshop.data.dto.BookDTO;
+import com.example.bookshop.repositories.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService {
 
-    private IBookRepository repository;
+    private BookRepository bookRepository;
 
     @Autowired
-    public BookService(IBookRepository aRepository) {
-        repository = aRepository;
+    public BookService(BookRepository aBookRepository) {
+        bookRepository = aBookRepository;
     }
 
-    public List<Book> getAllBooks() {
-        return repository.findAll().stream()
-                .map(Book::of)
-                .collect(Collectors.toList());
+    public List<BookDTO> getPageOfBooks(int aOffset, int aLimit) {
+        return bookRepository.findAll(PageRequest.of(aOffset / aLimit, aLimit))
+                .map(BookDTO::of)
+                .getContent();
     }
 
-    public List<Book> getPupularBooks() {
-        return repository.findBooksByBestsellerIsTrue().stream()
-                .map(Book::of)
-                .collect(Collectors.toList());
+    public List<BookDTO> getPageOfBooks(LocalDate aStartDate, LocalDate aEndDate, int aOffset, int aLimit) {
+        return bookRepository.findBookEntitiesByPubDateAfterAndPubDateBefore(aStartDate, aEndDate, PageRequest.of(aOffset / aLimit, aLimit))
+                .map(BookDTO::of)
+                .getContent();
     }
 
-    public List<Book> getRecentBooks() {
-        return repository.findBooksByPubDateIsAfter(LocalDate.now()
-                .minusYears(3)).stream()
-                .map(Book::of)
-                .collect(Collectors.toList());
+    public List<BookDTO> getPageOfRecentBooks(int aOffset, int aLimit) {
+        return bookRepository.findBookEntitiesByPubDateAfter(LocalDate.now()
+                        .minusYears(3), PageRequest.of(aOffset / aLimit, aLimit))
+                .map(BookDTO::of)
+                .getContent();
     }
 
-    public Page<Book> getPageOfSearchResultBooks(String aSearchWord, Integer aOffset, Integer aLimit) {
-        return repository.findBookByTitleContaining(aSearchWord, PageRequest.of(aOffset, aLimit))
-                .map(Book::of);
+    public List<BookDTO> getPageOfPopularBooks(int aOffset, int aLimit) {
+        return bookRepository.findBookEntitiesByBestsellerIsTrue(PageRequest.of(aOffset / aLimit, aLimit))
+                .map(BookDTO::of)
+                .getContent();
+    }
+
+    public List<BookDTO> getPageOfSearchResultBooks(String aSearchWord, Integer aOffset, Integer aLimit) {
+        return bookRepository.findBookEntitiesByTitleContainingIgnoreCase(aSearchWord, PageRequest.of(aOffset / aLimit, aLimit))
+                .map(BookDTO::of)
+                .getContent();
+    }
+
+    public List<BookDTO> getBooksByGenreId(long aGenreId, Integer aOffset, Integer aLimit) {
+        return bookRepository.findBookEntitiesByGenreId(aGenreId, PageRequest.of(aOffset / aLimit, aLimit))
+                .map(BookDTO::of)
+                .getContent();
+    }
+
+    public List<BookDTO> getBooksByAuthorId(long aAuthorId, Integer aOffset, Integer aLimit) {
+        return bookRepository.findBookEntitiesByAuthorId(aAuthorId, PageRequest.of(aOffset / aLimit, aLimit))
+                .map(BookDTO::of)
+                .getContent();
     }
 
 }
