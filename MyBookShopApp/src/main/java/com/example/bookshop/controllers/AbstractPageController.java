@@ -1,6 +1,6 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.data.dto.SearchWordDTO;
+import com.example.bookshop.controllers.data.dto.SearchWordDTO;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 

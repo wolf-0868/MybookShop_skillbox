@@ -1,6 +1,6 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.data.dto.AuthorDTO;
+import com.example.bookshop.controllers.data.dto.AuthorDTO;
 import com.example.bookshop.repositories.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class AuthorService {
     }
 
     public AuthorDTO findBySlug(String aSlug) {
-        return repository.findAuthorEntitiesBySlug(aSlug)
+        return repository.findBySlug(aSlug)
                 .map(AuthorDTO::of)
                 .orElse(null);
     }

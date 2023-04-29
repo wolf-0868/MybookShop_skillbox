@@ -1,6 +1,6 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.data.dto.GenreDTO;
+import com.example.bookshop.controllers.data.dto.GenreDTO;
 import com.example.bookshop.repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ public class GenreService {
     }
 
     public GenreDTO findBySlug(String aSlug) {
-        return repository.findGenreEntityBySlug(aSlug)
+        return repository.findBySlug(aSlug)
                 .map(GenreDTO::of)
                 .orElse(null);
     }
