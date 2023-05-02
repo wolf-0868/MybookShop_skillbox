@@ -1,7 +1,12 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.controllers.data.dto.BookReviewDTO;
+import com.example.bookshop.data.dto.BookReviewDTO;
+import com.example.bookshop.data.dto.DraftBookReviewDTO;
+import com.example.bookshop.data.entities.book.review.BookReviewEntity;
+import com.example.bookshop.repositories.BookRepository;
 import com.example.bookshop.repositories.BookReviewRepository;
+import com.example.bookshop.repositories.UserRepository;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,9 +18,15 @@ public class BookReviewService {
 
     private final BookReviewRepository bookReviewRepository;
 
+    private final BookRepository bookRepository;
+
+    private final UserRepository userRepository;
+
     @Autowired
-    public BookReviewService(BookReviewRepository aBookReviewRepository) {
+    public BookReviewService(BookReviewRepository aBookReviewRepository, BookRepository aBookRepository, UserRepository aUserRepository) {
         bookReviewRepository = aBookReviewRepository;
+        bookRepository = aBookRepository;
+        userRepository = aUserRepository;
     }
 
     public List<BookReviewDTO> getReviersByBookId(long aBookId) {
@@ -23,6 +34,20 @@ public class BookReviewService {
                 .stream()
                 .map(BookReviewDTO::of)
                 .collect(Collectors.toList());
+    }
+
+    public void saveNewReview(@NonNull DraftBookReviewDTO aDraftReview) {
+        bookReviewRepository.save(createEntity(aDraftReview));
+    }
+
+    private BookReviewEntity createEntity(DraftBookReviewDTO aDraft) {
+        BookReviewEntity entity = new BookReviewEntity();
+        entity.setBook(bookRepository.findById(aDraft.getBookId())
+                .orElseThrow());
+        entity.setUser(userRepository.findById(aDraft.getUserId())
+                .orElseThrow());
+        entity.setText(aDraft.getText());
+        return entity;
     }
 
 }

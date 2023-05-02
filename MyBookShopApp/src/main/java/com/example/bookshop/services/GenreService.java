@@ -1,11 +1,12 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.controllers.data.dto.GenreDTO;
+import com.example.bookshop.data.dto.GenreDTO;
 import com.example.bookshop.repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +36,13 @@ public class GenreService {
         return repository.findById(aId)
                 .map(GenreDTO::of)
                 .orElse(null);
+    }
+
+    public Set<GenreDTO> findByBookId(long aBookId) {
+        return repository.findByBookId(aBookId)
+                .stream()
+                .map(GenreDTO::of)
+                .collect(Collectors.toSet());
     }
 
 }

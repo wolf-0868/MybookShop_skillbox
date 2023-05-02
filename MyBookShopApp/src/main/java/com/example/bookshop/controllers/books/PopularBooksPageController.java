@@ -1,7 +1,7 @@
 package com.example.bookshop.controllers.books;
 
 import com.example.bookshop.controllers.AboutPageController;
-import com.example.bookshop.controllers.data.dto.BooksPageDTO;
+import com.example.bookshop.data.dto.BooksPageDTO;
 import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

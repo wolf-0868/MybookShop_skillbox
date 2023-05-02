@@ -1,6 +1,6 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.controllers.data.dto.BooksPageDTO;
+import com.example.bookshop.data.dto.BooksPageDTO;
 import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class BookPagesController extends AbstractPageController {
     public BooksPageDTO getRecommendedBooksPage(
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) {
-        return new BooksPageDTO(bookService.getPageOfBooks(aOffset, aLimit));
+        return new BooksPageDTO(bookService.getRecommendedBooks(aOffset, aLimit));
     }
 
 }

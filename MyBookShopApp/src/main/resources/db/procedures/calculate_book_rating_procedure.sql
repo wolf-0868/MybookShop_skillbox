@@ -1,4 +1,4 @@
-CREATE OR REPLACE PROCEDURE CALCULATE_BOOK_RATING_PROCEDURE(IN book_id_in BIGINT, OUT rating_out DOUBLE PRECISION)
+CREATE OR REPLACE FUNCTION CALCULATE_BOOK_RATING_FUNCTION(a_book_id bigint) RETURNS double precision
     LANGUAGE plpgsql AS
 $$
 DECLARE
@@ -6,13 +6,12 @@ DECLARE
     count_cart int;
     count_kept int;
 BEGIN
-    count_all := count(*) FROM book2user WHERE book_id = book_id_in;
-    IF count_all = 0 THEN
-        rating_out := 0;
-    ELSE
-        count_cart := count(*) FROM book2user WHERE book_id = book_id_in and type = 'CART';
-        count_kept := count(*) FROM book2user WHERE book_id = book_id_in and type = 'KEPT';
-        rating_out := count_all + (0.7 * count_cart) + (0.4 * count_kept);
-    END IF;
+    count_all := count(*) FROM book2user WHERE book_id = a_book_id;
+    if count_all = 0 then
+        RETURN 0;
+    end if;
+    count_cart := count(*) FROM book2user WHERE book_id = a_book_id and type = 'CART';
+    count_kept := count(*) FROM book2user WHERE book_id = a_book_id and type = 'KEPT';
+    RETURN count_all + (0.7 * count_cart) + (0.4 * count_kept);
 END
 $$;

@@ -1,0 +1,8 @@
+#main-dialog::backdrop {
+    background-color: rgba(0, 0, 0, .7);
+}
+
+footer #dialog-footer--confirm-btn {
+    background: #6db33f;
+    color: white;
+}

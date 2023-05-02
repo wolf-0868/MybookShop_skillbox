@@ -1,6 +1,6 @@
 package com.example.bookshop.repositories;
 
-import com.example.bookshop.controllers.data.entities.book.review.BookReviewEntity;
+import com.example.bookshop.data.entities.book.review.BookReviewEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

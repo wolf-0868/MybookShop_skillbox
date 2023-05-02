@@ -1,7 +1,7 @@
 package com.example.bookshop.services;
 
-import com.example.bookshop.controllers.data.dto.BookDTO;
-import com.example.bookshop.controllers.data.entities.enums.BookBindingType;
+import com.example.bookshop.data.dto.BookDTO;
+import com.example.bookshop.data.entities.enums.BookBindingType;
 import com.example.bookshop.repositories.BookRepository;
 import com.example.bookshop.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +24,12 @@ public class BookService {
         userRepository = aUserRepository;
     }
 
+    public BookDTO FindById(long aBookId) {
+        return bookRepository.findById(aBookId)
+                .map(BookDTO::of)
+                .orElse(null);
+    }
+
     public BookDTO getBookBySlug(String aSlug) {
         return bookRepository.findBySlug(aSlug)
                 .map(BookDTO::of)
@@ -38,6 +44,12 @@ public class BookService {
 
     public List<BookDTO> getPageOfBooks(LocalDate aStartDate, LocalDate aEndDate, int aOffset, int aLimit) {
         return bookRepository.findByPubDateAfterAndPubDateBefore(aStartDate, aEndDate, PageRequest.of(aOffset / aLimit, aLimit))
+                .map(BookDTO::of)
+                .getContent();
+    }
+
+    public List<BookDTO> getRecommendedBooks(int aOffset, int aLimit) {
+        return bookRepository.findByRecommendedBooks(PageRequest.of(aOffset / aLimit, aLimit))
                 .map(BookDTO::of)
                 .getContent();
     }

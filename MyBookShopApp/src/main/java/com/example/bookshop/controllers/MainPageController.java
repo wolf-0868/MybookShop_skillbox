@@ -1,7 +1,7 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.controllers.data.dto.GenreAndTag;
-import com.example.bookshop.controllers.data.dto.GenreDTO;
+import com.example.bookshop.data.dto.GenreAndTag;
+import com.example.bookshop.data.dto.GenreDTO;
 import com.example.bookshop.services.BookService;
 import com.example.bookshop.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +46,7 @@ public class MainPageController extends AbstractPageController {
     @Override
     public void addAttributes(Model aModel) {
         super.addAttributes(aModel);
-        aModel.addAttribute("recommendedBooks", bookService.getPageOfBooks(0, 6));
+        aModel.addAttribute("recommendedBooks", bookService.getRecommendedBooks(0, 6));
         aModel.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 6));
         aModel.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 6));
         aModel.addAttribute("genresMap", genreService.getAllGenres()

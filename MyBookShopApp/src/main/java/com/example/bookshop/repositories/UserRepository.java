@@ -1,7 +1,7 @@
 package com.example.bookshop.repositories;
 
-import com.example.bookshop.controllers.data.entities.enums.BookBindingType;
-import com.example.bookshop.controllers.data.entities.user.UserEntity;
+import com.example.bookshop.data.entities.enums.BookBindingType;
+import com.example.bookshop.data.entities.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

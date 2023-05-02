@@ -1,7 +1,7 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.controllers.data.dto.GenreDTO;
-import com.example.bookshop.controllers.data.dto.SlugDTO;
+import com.example.bookshop.data.dto.GenreDTO;
+import com.example.bookshop.data.dto.SlugDTO;
 import com.example.bookshop.services.BookService;
 import com.example.bookshop.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
