@@ -14,7 +14,6 @@ import java.util.Optional;
 public class GenreBooksPageController {
 
     private final BookService bookService;
-
     private final GenreService genreService;
 
     @Autowired

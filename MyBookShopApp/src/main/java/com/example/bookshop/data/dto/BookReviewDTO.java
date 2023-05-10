@@ -76,8 +76,7 @@ public class BookReviewDTO {
         if (user != null) {
             bookReviewBuilder.userId(user.getId()).reviewer(user.getName());
         }
-        return bookReviewBuilder
-                .build();
+        return bookReviewBuilder.build();
     }
 
 }

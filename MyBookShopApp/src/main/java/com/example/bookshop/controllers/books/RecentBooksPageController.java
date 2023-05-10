@@ -1,6 +1,5 @@
 package com.example.bookshop.controllers.books;
 
-import com.example.bookshop.controllers.AbstractPageController;
 import com.example.bookshop.data.dto.BooksPageDTO;
 import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 
 @Controller
 @RequestMapping(value = "/books/recent", method = {RequestMethod.GET, RequestMethod.POST})
-public class RecentBooksPageController extends AbstractPageController {
+public class RecentBooksPageController {
 
     private final BookService bookService;
 
@@ -22,9 +21,8 @@ public class RecentBooksPageController extends AbstractPageController {
         bookService = aBookService;
     }
 
-    @Override
+    @ModelAttribute
     protected void addAttributes(Model aModel) {
-        super.addAttributes(aModel);
         aModel.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 20));
     }
 

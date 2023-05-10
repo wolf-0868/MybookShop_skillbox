@@ -1,10 +1,10 @@
 package com.example.bookshop.controllers.books;
 
-import com.example.bookshop.controllers.AbstractPageController;
 import com.example.bookshop.data.dto.BookDTO;
 import com.example.bookshop.data.dto.DraftBookReviewDTO;
 import com.example.bookshop.data.dto.SlugDTO;
 import com.example.bookshop.data.entities.enums.BookBindingType;
+import com.example.bookshop.security.BookshopUserRegistrar;
 import com.example.bookshop.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,21 +14,19 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-public class SlugBookPageController extends AbstractPageController {
+public class SlugBookPageController {
 
     private final BookReviewService bookReviewService;
-
+    private final BookshopUserRegistrar bookshopUserRegistrar;
     private final BookService bookService;
-
     private final AuthorService authorService;
-
     private final GenreService genreService;
-
     private final UserService userService;
 
     @Autowired
-    public SlugBookPageController(BookReviewService aBookReviewService, BookService aBookService, AuthorService aAuthorService, GenreService aGenreService, UserService aUserService) {
+    public SlugBookPageController(BookReviewService aBookReviewService, BookshopUserRegistrar aBookshopUserRegistrar, BookService aBookService, AuthorService aAuthorService, GenreService aGenreService, UserService aUserService) {
         bookReviewService = aBookReviewService;
+        bookshopUserRegistrar = aBookshopUserRegistrar;
         bookService = aBookService;
         authorService = aAuthorService;
         genreService = aGenreService;
@@ -61,8 +59,9 @@ public class SlugBookPageController extends AbstractPageController {
     public boolean changeBookStatus(
             @RequestParam("booksIds[]") List<Long> aBookIds,
             @RequestParam("status") BookBindingType aStatus) {
-        if ((!aBookIds.isEmpty()) && (aStatus != null)) {
-            bookService.changeBookStatus(aBookIds.get(0), 1L, aStatus);
+        Long userId = bookshopUserRegistrar.getCurrentIdUser();
+        if ((userId != null) && (!aBookIds.isEmpty()) && (aStatus != null)) {
+            bookService.changeBookStatus(aBookIds.get(0), userId, aStatus);
             return true;
         }
         return false;
@@ -73,16 +72,19 @@ public class SlugBookPageController extends AbstractPageController {
             @RequestParam("bookid") Long aBookId,
             @ModelAttribute("action") String aAction,
             @ModelAttribute("review-text") String aText) {
-        BookDTO book = bookService.FindById(aBookId);
-        if (book != null) {
-            if ("confirm".equals(aAction)) {
-                bookReviewService.saveNewReview(DraftBookReviewDTO.builder()
-                        .bookId(book.getId())
-                        .userId(1L)
-                        .text(aText)
-                        .build());
+        Long userId = bookshopUserRegistrar.getCurrentIdUser();
+        if (userId != null) {
+            BookDTO book = bookService.FindById(aBookId);
+            if ((book != null)) {
+                if ("confirm".equals(aAction)) {
+                    bookReviewService.saveNewReview(DraftBookReviewDTO.builder()
+                            .bookId(book.getId())
+                            .userId(userId)
+                            .text(aText)
+                            .build());
+                }
+                return ("redirect:/books/" + book.getSlug());
             }
-            return ("redirect:/books/" + book.getSlug());
         }
         return null;
     }

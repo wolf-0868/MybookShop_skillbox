@@ -7,20 +7,16 @@ import com.example.bookshop.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/genres", method = RequestMethod.GET)
-public class GenresPageController extends AbstractPageController {
+public class GenresPageController {
 
     private GenreService genreService;
-
     private BookService bookService;
 
     @Autowired
@@ -29,9 +25,8 @@ public class GenresPageController extends AbstractPageController {
         bookService = aBookService;
     }
 
-    @Override
+    @ModelAttribute
     protected void addAttributes(Model aModel) {
-        super.addAttributes(aModel);
         aModel.addAttribute("genreDTO", GenreDTO.builder()
                 .id(-1L)
                 .build());

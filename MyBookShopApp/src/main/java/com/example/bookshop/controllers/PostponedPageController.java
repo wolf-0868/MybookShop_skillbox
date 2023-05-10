@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/postponed", method = RequestMethod.GET)
-public class PostponedPageController extends AbstractPageController {
+public class PostponedPageController {
 
     @GetMapping
     public String postponedPage() {

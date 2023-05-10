@@ -17,12 +17,12 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     Page<BookEntity> findByPubDateAfter(LocalDate aDate, Pageable aPageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM book b ORDER BY calculate_book_rating_function(id) DESC ")
-    Page<BookEntity> findByRecommendedBooks(Pageable aPageable);
-
     Page<BookEntity> findByPubDateAfterAndPubDateBefore(LocalDate aStartDate, LocalDate aEndDate, Pageable aPageable);
 
     Page<BookEntity> findByTitleContainingIgnoreCase(String aBookTitle, Pageable aPageable);
+
+    @Query(nativeQuery = true, value = "SELECT * FROM book b ORDER BY calculate_book_rating_function(id) DESC ")
+    Page<BookEntity> findByRecommendedBooks(Pageable aPageable);
 
     @Query(value = "SELECT b2a.book FROM Book2GenreEntity b2a WHERE b2a.genre.id = ?1")
     Page<BookEntity> findByGenreId(long aGenreId, Pageable aPageable);

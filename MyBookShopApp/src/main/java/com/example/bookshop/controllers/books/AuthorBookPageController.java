@@ -1,6 +1,5 @@
 package com.example.bookshop.controllers.books;
 
-import com.example.bookshop.controllers.AbstractPageController;
 import com.example.bookshop.data.dto.AuthorDTO;
 import com.example.bookshop.data.dto.BooksPageDTO;
 import com.example.bookshop.data.dto.SlugDTO;
@@ -16,10 +15,9 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping(value = "/books/author", method = {RequestMethod.GET, RequestMethod.POST})
-public class AuthorBookPageController extends AbstractPageController {
+public class AuthorBookPageController {
 
     private final BookService bookService;
-
     private final AuthorService authorService;
 
     @Autowired
@@ -28,9 +26,8 @@ public class AuthorBookPageController extends AbstractPageController {
         authorService = aAuthorService;
     }
 
-    @Override
+    @ModelAttribute
     protected void addAttributes(Model aModel) {
-        super.addAttributes(aModel);
         aModel.addAttribute("authorBooks", new ArrayList<>());
         aModel.addAttribute("authorDTO", AuthorDTO.builder()
                 .id(-1L)

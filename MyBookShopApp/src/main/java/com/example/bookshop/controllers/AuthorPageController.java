@@ -7,20 +7,16 @@ import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/authors", method = RequestMethod.GET)
-public class AuthorPageController extends AbstractPageController {
+public class AuthorPageController {
 
     private final AuthorService authorService;
-
     private final BookService bookService;
 
     @Autowired
@@ -29,9 +25,8 @@ public class AuthorPageController extends AbstractPageController {
         bookService = aBookService;
     }
 
-    @Override
+    @ModelAttribute
     public void addAttributes(Model aModel) {
-        super.addAttributes(aModel);
         aModel.addAttribute("authorBooks", new ArrayList<>());
         aModel.addAttribute("authorDTO", AuthorDTO.builder()
                 .id(-1L)

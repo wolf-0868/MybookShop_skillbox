@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/documents", method = RequestMethod.GET)
-public class DocumentsPageController extends AbstractPageController {
+public class DocumentsPageController {
 
     @GetMapping
     public String documentsPage() {

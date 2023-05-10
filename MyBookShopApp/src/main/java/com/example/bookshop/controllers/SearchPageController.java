@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 @Controller
 @RequestMapping(value = "/search")
-public class SearchPageController extends AbstractPageController {
+public class SearchPageController {
 
     private final BookService bookService;
 

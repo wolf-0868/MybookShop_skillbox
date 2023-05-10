@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/contacts", method = RequestMethod.GET)
-public class ContactsPageController extends AbstractPageController {
+public class ContactsPageController {
 
     @GetMapping
     public String contactsPage() {

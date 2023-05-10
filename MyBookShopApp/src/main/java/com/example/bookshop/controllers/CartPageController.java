@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/cart", method = RequestMethod.GET)
-public class CartPageController extends AbstractPageController {
+public class CartPageController {
 
     @GetMapping
     public String cartPage() {

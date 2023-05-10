@@ -1,6 +1,5 @@
 package com.example.bookshop.controllers.books;
 
-import com.example.bookshop.controllers.AboutPageController;
 import com.example.bookshop.data.dto.BooksPageDTO;
 import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/books/popular", method = {RequestMethod.GET, RequestMethod.POST})
-public class PopularBooksPageController extends AboutPageController {
+public class PopularBooksPageController {
 
     private final BookService bookService;
 
@@ -19,9 +18,8 @@ public class PopularBooksPageController extends AboutPageController {
         bookService = aBookService;
     }
 
-    @Override
+    @ModelAttribute
     protected void addAttributes(Model aModel) {
-        super.addAttributes(aModel);
         aModel.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 20));
     }
 

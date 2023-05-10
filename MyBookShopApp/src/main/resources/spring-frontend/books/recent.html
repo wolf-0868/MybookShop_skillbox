@@ -18,7 +18,9 @@
   <script defer src="/assets/js/scripts.min.js?v=09585989"></script>
 </head>
 <body class="Site">
-<header th:replace="~{fragments/common_header_fragment :: headerFragment ('RECENT')}"></header>
+<header th:replace="${currentUserDTO == null}
+    ? ~{fragments/common_header_fragment :: headerFragment ('RECENT')}
+    : ~{fragments/common_header_fragment :: headerUserFragment}"></header>
 <div class="Middle">
   <div class="wrap">
     <main class="Middle-main">

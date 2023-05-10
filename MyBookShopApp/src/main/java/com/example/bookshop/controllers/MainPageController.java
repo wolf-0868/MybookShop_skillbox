@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -15,10 +16,9 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/", method = RequestMethod.GET)
-public class MainPageController extends AbstractPageController {
+public class MainPageController {
 
     private final BookService bookService;
-
     private final GenreService genreService;
 
     @Autowired
@@ -43,9 +43,8 @@ public class MainPageController extends AbstractPageController {
         return "";
     }
 
-    @Override
+    @ModelAttribute
     public void addAttributes(Model aModel) {
-        super.addAttributes(aModel);
         aModel.addAttribute("recommendedBooks", bookService.getRecommendedBooks(0, 6));
         aModel.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 6));
         aModel.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 6));

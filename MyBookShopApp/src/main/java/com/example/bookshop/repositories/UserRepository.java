@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
+    UserEntity findByEmail(String aEmail);
+
     @Query(value = "SELECT case when count(b2u) > 0 then true else false end FROM Book2UserEntity b2u WHERE b2u.user.id = :user_id and b2u.book.id = :book_id and b2u.type = :type")
     boolean existsByBookStatus(
             @Param("user_id") long aUserId,

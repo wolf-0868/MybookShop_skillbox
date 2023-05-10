@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
 public class BookReviewService {
 
     private final BookReviewRepository bookReviewRepository;
-
     private final BookRepository bookRepository;
-
     private final UserRepository userRepository;
 
     @Autowired
@@ -29,6 +27,12 @@ public class BookReviewService {
         userRepository = aUserRepository;
     }
 
+    public BookReviewDTO findById(long aId) {
+        return bookReviewRepository.findById(aId)
+                .map(BookReviewDTO::of)
+                .orElse(null);
+    }
+
     public List<BookReviewDTO> getReviersByBookId(long aBookId) {
         return bookReviewRepository.findByBookId(aBookId)
                 .stream()
@@ -36,18 +40,22 @@ public class BookReviewService {
                 .collect(Collectors.toList());
     }
 
-    public void saveNewReview(@NonNull DraftBookReviewDTO aDraftReview) {
-        bookReviewRepository.save(createEntity(aDraftReview));
+    public Long saveNewReview(@NonNull DraftBookReviewDTO aDraftReview) {
+        return bookReviewRepository.save(createEntity(aDraftReview)).getId();
     }
 
     private BookReviewEntity createEntity(DraftBookReviewDTO aDraft) {
         BookReviewEntity entity = new BookReviewEntity();
-        entity.setBook(bookRepository.findById(aDraft.getBookId())
-                .orElseThrow());
-        entity.setUser(userRepository.findById(aDraft.getUserId())
-                .orElseThrow());
+        entity.setBook(bookRepository.findById(aDraft.getBookId()).orElseThrow());
+        entity.setUser(userRepository.findById(aDraft.getUserId()).orElseThrow());
         entity.setText(aDraft.getText());
         return entity;
     }
 
+    public List<BookReviewDTO> getAll() {
+        return bookReviewRepository.findAll()
+                .stream()
+                .map(BookReviewDTO::of)
+                .collect(Collectors.toList());
+    }
 }

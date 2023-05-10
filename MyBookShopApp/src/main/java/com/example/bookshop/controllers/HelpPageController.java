@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping(value = "/faq", method = RequestMethod.GET)
-public class HelpPageController extends AbstractPageController {
+public class HelpPageController {
 
     @GetMapping
     public String helpPage() {

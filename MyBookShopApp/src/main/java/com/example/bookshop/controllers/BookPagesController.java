@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/books", method = RequestMethod.GET)
-public class BookPagesController extends AbstractPageController {
+public class BookPagesController {
 
     private final BookService bookService;
 
