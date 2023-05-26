@@ -12,5 +12,9 @@ public enum BookBindingType {
     PAID,
 
     /** В архиве */
-    ARCHIVED;
+    ARCHIVED,
+
+    /** Отвязать */
+    UNLINK;
+
 }

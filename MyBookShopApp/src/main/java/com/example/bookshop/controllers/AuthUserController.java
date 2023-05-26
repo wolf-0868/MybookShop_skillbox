@@ -1,6 +1,11 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.security.*;
+import com.example.bookshop.data.dto.drafts.DraftUserDTO;
+import com.example.bookshop.data.payloads.ContactConfirmationPayload;
+import com.example.bookshop.data.payloads.LoginPassConfirmationPayload;
+import com.example.bookshop.exceptions.UserNotFountException;
+import com.example.bookshop.security.BookshopUserRegistrar;
+import com.example.bookshop.security.ConfirmationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +23,8 @@ public class AuthUserController {
     private final BookshopUserRegistrar bookshopUserRegistrar;
 
     @Autowired
-    public AuthUserController(BookshopUserRegistrar aBookshopUserRegistrer) {
-        bookshopUserRegistrar = aBookshopUserRegistrer;
+    public AuthUserController(BookshopUserRegistrar aBookshopUserRegistrar) {
+        bookshopUserRegistrar = aBookshopUserRegistrar;
     }
 
     @GetMapping(value = "/signin")
@@ -29,7 +34,7 @@ public class AuthUserController {
 
     @GetMapping(value = "/signup")
     public String signUpPage(Model aModel) {
-        aModel.addAttribute("regForm", new RegistrationForm());
+        aModel.addAttribute("draftUserDTO", new DraftUserDTO());
         return "signup";
     }
 
@@ -49,13 +54,6 @@ public class AuthUserController {
         return response;
     }
 
-    @PostMapping(value = "/reg")
-    public String handleUserRegistration(RegistrationForm aRegistrationForm, Model aModel) {
-        bookshopUserRegistrar.registerNewUser(aRegistrationForm);
-        aModel.addAttribute("regOk", true);
-        return "signin";
-    }
-
     @ResponseBody
     @PostMapping(value = "/login")
     public ConfirmationResponse handleLogin(@RequestBody LoginPassConfirmationPayload aPayload, HttpServletResponse aHttpServletResponse) {
@@ -65,28 +63,21 @@ public class AuthUserController {
         return response;
     }
 
-//    @GetMapping(value = "/logout")
-//    public String handleLogout(HttpServletRequest aRequest) {
-//        HttpSession session = aRequest.getSession();
-//        SecurityContextHolder.clearContext();
-//
-//        if (session != null) {
-//            session.invalidate();
-//        }
-//        for (Cookie cookie : aRequest.getCookies()) {
-//            cookie.setMaxAge(0);
-//        }
-//        return "redirect:/";
-//    }
-
-    @GetMapping(value = "/my")
-    public String handleMy() {
-        return "my";
+    @PostMapping(value = "/registrationNewUser")
+    public String handleUserRegistration(DraftUserDTO aDraftUserDTO, Model aModel) {
+        bookshopUserRegistrar.registerNewUser(aDraftUserDTO);
+        aModel.addAttribute("regOk", true);
+        return "signin";
     }
 
-    @GetMapping(value = "/profile")
-    public String handleProfile(Model aModel) {
-        aModel.addAttribute("currentUserDTO", bookshopUserRegistrar.getCurrentUser());
+    @PostMapping(value = "/updateCurrentUser")
+    public String handleUpdateCurrentUser(DraftUserDTO aDraftUserDTO, Model aModel) throws UserNotFountException {
+        if ((aDraftUserDTO.getPassword() == null) || (aDraftUserDTO.getPassword().equals(aDraftUserDTO.getPasswordReply()))) {
+            aModel.addAttribute("updateOk", true);
+            bookshopUserRegistrar.updateCurrentUser(aDraftUserDTO);
+        } else {
+            aModel.addAttribute("updateError", false);
+        }
         return "profile";
     }
 

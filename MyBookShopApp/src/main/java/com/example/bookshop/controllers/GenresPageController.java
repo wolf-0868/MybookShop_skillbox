@@ -2,6 +2,7 @@ package com.example.bookshop.controllers;
 
 import com.example.bookshop.data.dto.GenreDTO;
 import com.example.bookshop.data.dto.SlugDTO;
+import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.services.BookService;
 import com.example.bookshop.services.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
@@ -31,7 +32,7 @@ public class GenresPageController {
                 .id(-1L)
                 .build());
         aModel.addAttribute("genreValues", genreService.getAllGenres());
-        aModel.addAttribute("genreBooks", new ArrayList<>());
+        aModel.addAttribute("genreBooks", List.of());
         aModel.addAttribute("genreMapValues", genreService.getAllGenres()
                 .stream()
                 .collect(Collectors.groupingBy(g -> g)));
@@ -48,16 +49,10 @@ public class GenresPageController {
     }
 
     @GetMapping(value = "/{genreSlug}")
-    public String getBooksByGenrePage(@PathVariable(value = "genreSlug", required = false) SlugDTO aSlug, Model aModel) {
-        if (aSlug == null) {
-            aModel.addAttribute("booksByGenreResult", new ArrayList<>());
-        } else {
-            GenreDTO genre = genreService.findBySlug(aSlug.getName());
-            if (genre != null) {
-                aModel.addAttribute("genreDTO", genre);
-                aModel.addAttribute("genreBooks", bookService.getBooksByGenreId(genre.getId(), 0, 20));
-            }
-        }
+    public String getBooksByGenrePage(@PathVariable(value = "genreSlug") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
+        GenreDTO genre = genreService.findBySlug(aSlug.getName());
+        aModel.addAttribute("genreDTO", genre);
+        aModel.addAttribute("genreBooks", bookService.getBooksByGenreId(genre.getId(), 0, 20));
         return "genres/slug";
     }
 

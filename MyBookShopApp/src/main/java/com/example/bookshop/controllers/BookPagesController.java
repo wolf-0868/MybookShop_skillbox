@@ -1,13 +1,13 @@
 package com.example.bookshop.controllers;
 
-import com.example.bookshop.data.dto.BooksPageDTO;
+import com.example.bookshop.data.dto.page.BooksPageDTO;
 import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(value = "/books", method = RequestMethod.GET)
+@RequestMapping(value = "/books", method = {RequestMethod.GET, RequestMethod.POST})
 public class BookPagesController {
 
     private final BookService bookService;

@@ -1,8 +1,9 @@
 package com.example.bookshop.controllers.books;
 
 import com.example.bookshop.data.dto.AuthorDTO;
-import com.example.bookshop.data.dto.BooksPageDTO;
 import com.example.bookshop.data.dto.SlugDTO;
+import com.example.bookshop.data.dto.page.BooksPageDTO;
+import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.services.AuthorService;
 import com.example.bookshop.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/books/author", method = {RequestMethod.GET, RequestMethod.POST})
@@ -27,24 +27,18 @@ public class AuthorBookPageController {
     }
 
     @ModelAttribute
-    protected void addAttributes(Model aModel) {
-        aModel.addAttribute("authorBooks", new ArrayList<>());
+    public void addAttributes(Model aModel) {
+        aModel.addAttribute("authorBooks", List.of());
         aModel.addAttribute("authorDTO", AuthorDTO.builder()
                 .id(-1L)
                 .build());
     }
 
     @GetMapping(value = "/{authorSlug}")
-    public String booksByAuthorPage(
-            @PathVariable(value = "authorSlug", required = false) SlugDTO aSlug,
-            Model aModel) {
-        if (aSlug != null) {
-            AuthorDTO author = authorService.findBySlug(aSlug.getName());
-            if (author != null) {
-                aModel.addAttribute("authorDTO", author);
-                aModel.addAttribute("authorBooks", bookService.getBooksByAuthorId(author.getId(), 0, 20));
-            }
-        }
+    public String booksByAuthorPage(@PathVariable(value = "authorSlug") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
+        AuthorDTO author = authorService.findBySlug(aSlug.getName());
+        aModel.addAttribute("authorDTO", author);
+        aModel.addAttribute("authorBooks", bookService.getBooksByAuthorId(author.getId(), 0, 20));
         return "books/author";
     }
 
@@ -53,10 +47,8 @@ public class AuthorBookPageController {
     public BooksPageDTO getBooksByAuthorPage(
             @PathVariable(value = "authorId", required = false) Long aAuthorId,
             @RequestParam("offset") Integer aOffset,
-            @RequestParam("limit") Integer aLimit) {
-        return Optional.ofNullable(authorService.findById(aAuthorId))
-                .map(a -> new BooksPageDTO(bookService.getBooksByAuthorId(a.getId(), aOffset, aLimit)))
-                .orElse(null);
+            @RequestParam("limit") Integer aLimit) throws DataNotFoundException {
+        return new BooksPageDTO(bookService.getBooksByAuthorId(authorService.findById(aAuthorId).getId(), aOffset, aLimit));
     }
 
 }

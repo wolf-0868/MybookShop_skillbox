@@ -2,7 +2,11 @@ package com.example.bookshop.security;
 
 
 import com.example.bookshop.data.dto.UserDTO;
+import com.example.bookshop.data.dto.drafts.DraftUserDTO;
 import com.example.bookshop.data.entities.user.UserEntity;
+import com.example.bookshop.data.payloads.ContactConfirmationPayload;
+import com.example.bookshop.data.payloads.LoginPassConfirmationPayload;
+import com.example.bookshop.exceptions.UserNotFountException;
 import com.example.bookshop.repositories.UserRepository;
 import com.example.bookshop.security.jwt.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,15 +38,18 @@ public class BookshopUserRegistrar {
         bookshopUserDetailsService = aBookshopUserDetailsService;
     }
 
-    public void registerNewUser(RegistrationForm aRegistrationForm) {
-        if (userRepository.findByEmail(aRegistrationForm.getEmail()) == null) {
+    public UserDTO registerNewUser(DraftUserDTO aDraftUserDTO) {
+        if (userRepository.findByEmail(aDraftUserDTO.getEmail()) == null) {
             UserEntity user = new UserEntity();
-            user.setName(aRegistrationForm.getName());
-            user.setEmail(aRegistrationForm.getEmail());
-            user.setPhone(aRegistrationForm.getPhone());
-            user.setPassword(passwordEncoder.encode(aRegistrationForm.getPassword()));
-            userRepository.save(user);
+            user.setName(aDraftUserDTO.getName());
+            user.setEmail(aDraftUserDTO.getEmail());
+            user.setPhone(aDraftUserDTO.getPhone());
+            user.setPassword(passwordEncoder.encode(aDraftUserDTO.getPassword()));
+            return Optional.ofNullable(userRepository.save(user))
+                    .map(UserDTO::of)
+                    .orElse(null);
         }
+        return null;
     }
 
     public ConfirmationResponse login(ContactConfirmationPayload aPayload) {
@@ -62,25 +69,34 @@ public class BookshopUserRegistrar {
         return response;
     }
 
-    private UserEntity getCurrentUserEntity() {
+    private UserEntity getCurrentUserEntity() throws UserNotFountException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return Optional.ofNullable(authentication.getPrincipal())
                 .filter(BookshopUserDetails.class::isInstance)
                 .map(BookshopUserDetails.class::cast)
                 .map(BookshopUserDetails::getUser)
-                .orElse(null);
+                .orElseThrow(() -> new UserNotFountException("Отсутствует текущий пользователь"));
     }
 
-    public UserDTO getCurrentUser() {
-        return Optional.ofNullable(getCurrentUserEntity())
-                .map(UserDTO::of)
-                .orElse(null);
+    public UserDTO getCurrentUser() throws UserNotFountException {
+        return UserDTO.of(getCurrentUserEntity());
     }
 
-    public Long getCurrentIdUser() {
-        return Optional.ofNullable(getCurrentUserEntity())
-                .map(UserEntity::getId)
-                .orElse(null);
+    public DraftUserDTO getDraftCurrentUser() throws UserNotFountException {
+        return DraftUserDTO.of(getCurrentUserEntity());
+    }
+
+    public Long getCurrentIdUser() throws UserNotFountException {
+        return getCurrentUserEntity().getId();
+    }
+
+    public void updateCurrentUser(DraftUserDTO aDraftUserDTO) throws UserNotFountException {
+        UserEntity user = getCurrentUserEntity();
+        user.setName(aDraftUserDTO.getName());
+        user.setEmail(aDraftUserDTO.getEmail());
+        user.setPhone(aDraftUserDTO.getPhone());
+        user.setPassword(passwordEncoder.encode(aDraftUserDTO.getPassword()));
+        userRepository.save(user);
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.bookshop.data.entities;
 
 import com.example.bookshop.data.entities.book.links.Book2UserEntity;
-import com.example.bookshop.data.entities.enums.BookBindingType;
 import com.example.bookshop.data.entities.genre.GenreEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,11 +23,17 @@ public class BookEntity {
     private Long id;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(name = "book2author", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "author_id"))
+    @JoinTable(
+            name = "book2author",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
     private Set<AuthorEntity> authors = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "book2genre", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "genre_id"))
+    @JoinTable(
+            name = "book2genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private Set<GenreEntity> genres = new HashSet<>();
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
@@ -58,16 +63,7 @@ public class BookEntity {
     @Column(name = "discount", nullable = false)
     private Integer discount = 0;
 
-    @Transient
-    private double rating;
-
-    @PostLoad
-    private void onLoad() {
-        rating = (bindingUsers.isEmpty()) ? 0 : (0.7 * bindingUsers.parallelStream()
-                .filter(b -> BookBindingType.CART.equals(b.getType()))
-                .count()) + (0.4 * bindingUsers.stream()
-                .filter(b -> BookBindingType.KEPT.equals(b.getType()))
-                .count());
-    }
+    @Column(name = "rating", nullable = false)
+    private double rating = 0;
 
 }

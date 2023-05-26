@@ -27,7 +27,7 @@ public class BalanceTransactionEntity {
     @Column(name = "datetime", columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP", nullable = false)
     private LocalDateTime datetime;
 
-    @Column(name = "valuse", nullable = false)
+    @Column(name = "value", nullable = false)
     private Integer value = 0;
 
     @ManyToOne

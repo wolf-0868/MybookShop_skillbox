@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Ошибка</title>
+  <meta content="Описание страницы" name="description"/>
+  <meta charset="utf-8"/>
+</head>
+<body>
+<h1>Произошла ошибка</h1>
+<h2 th:text="${errorExClassName}">Заголовок исключения</h2>
+<h3 th:text="${errorExMessage}">Описание ошибки</h3>
+<a href="/" th:href="@{/}">Вернуться на главную</a>
+</body>
+</html>

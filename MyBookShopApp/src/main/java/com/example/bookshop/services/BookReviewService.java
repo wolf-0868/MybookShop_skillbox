@@ -1,7 +1,7 @@
 package com.example.bookshop.services;
 
 import com.example.bookshop.data.dto.BookReviewDTO;
-import com.example.bookshop.data.dto.DraftBookReviewDTO;
+import com.example.bookshop.data.dto.drafts.DraftBookReviewDTO;
 import com.example.bookshop.data.entities.book.review.BookReviewEntity;
 import com.example.bookshop.repositories.BookRepository;
 import com.example.bookshop.repositories.BookReviewRepository;
@@ -27,13 +27,7 @@ public class BookReviewService {
         userRepository = aUserRepository;
     }
 
-    public BookReviewDTO findById(long aId) {
-        return bookReviewRepository.findById(aId)
-                .map(BookReviewDTO::of)
-                .orElse(null);
-    }
-
-    public List<BookReviewDTO> getReviersByBookId(long aBookId) {
+    public List<BookReviewDTO> getReviewsByBookId(long aBookId) {
         return bookReviewRepository.findByBookId(aBookId)
                 .stream()
                 .map(BookReviewDTO::of)

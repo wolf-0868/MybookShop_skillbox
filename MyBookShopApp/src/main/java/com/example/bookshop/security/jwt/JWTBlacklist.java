@@ -38,6 +38,4 @@ public class JWTBlacklist {
         blacklist.removeIf(jwtUtil::isTokenExpired);
     }
 
-
-
 }
