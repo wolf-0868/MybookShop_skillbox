@@ -3,21 +3,17 @@ package com.example.bookshop.controllers;
 import com.example.bookshop.data.dto.SearchWordDTO;
 import com.example.bookshop.data.dto.page.BooksPageDTO;
 import com.example.bookshop.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/search", method = RequestMethod.GET)
+@RequiredArgsConstructor
 public class SearchPageController {
 
     private final BookService bookService;
-
-    @Autowired
-    public SearchPageController(BookService aBookService) {
-        bookService = aBookService;
-    }
 
     @GetMapping(value = {"", "/{searchWord}"})
     public String searchPage(

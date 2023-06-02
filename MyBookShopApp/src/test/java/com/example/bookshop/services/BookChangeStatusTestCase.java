@@ -45,14 +45,14 @@ class BookChangeStatusTestCase {
     @Test
     @Order(1)
     void testAddStatus() {
-        book2UserService.changeBookindingType(1L, 1L, ARCHIVED);
+        book2UserService.changeBookBindingType(1L, 1L, ARCHIVED);
         assertTrue(book2UserRepository.existsBookByBindingType(1L, 1L, ARCHIVED));
     }
 
     @Test
     @Order(2)
     void testDeleteStatus() {
-        book2UserService.changeBookindingType(1L, 1L, ARCHIVED);
+        book2UserService.changeBookBindingType(1L, 1L, ARCHIVED);
         assertFalse(book2UserRepository.existsBookByBindingType(1L, 1L, ARCHIVED));
     }
 

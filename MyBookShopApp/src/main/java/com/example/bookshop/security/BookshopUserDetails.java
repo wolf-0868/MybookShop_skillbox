@@ -1,6 +1,7 @@
 package com.example.bookshop.security;
 
 import com.example.bookshop.data.entities.user.UserEntity;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,13 +9,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Arrays;
 import java.util.Collection;
 
+@AllArgsConstructor
 public class BookshopUserDetails implements UserDetails {
 
     private final UserEntity user;
-
-    public BookshopUserDetails(UserEntity aUserEntity) {
-        user = aUserEntity;
-    }
 
     public UserEntity getUser() {
         return user;

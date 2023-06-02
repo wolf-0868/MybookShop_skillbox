@@ -3,10 +3,8 @@ package com.example.bookshop.services;
 import com.example.bookshop.data.dto.BookDTO;
 import com.example.bookshop.data.entities.BookEntity;
 import com.example.bookshop.exceptions.DataNotFoundException;
-import com.example.bookshop.repositories.Book2UserRepository;
 import com.example.bookshop.repositories.BookRepository;
-import com.example.bookshop.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
@@ -15,26 +13,18 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final UserRepository userRepository;
-    private final Book2UserRepository book2UserRepository;
 
-    @Autowired
-    public BookService(BookRepository aBookRepository, UserRepository aUserRepository, Book2UserRepository aBook2UserRepository) {
-        bookRepository = aBookRepository;
-        userRepository = aUserRepository;
-        book2UserRepository = aBook2UserRepository;
-    }
-
-    public BookDTO FindById(long aBookId) throws DataNotFoundException {
+    public BookDTO findById(long aBookId) throws DataNotFoundException {
         return bookRepository.findById(aBookId)
                 .map(BookDTO::of)
                 .orElseThrow(() -> new DataNotFoundException(Map.of("id", aBookId), BookEntity.class.getName()));
     }
 
-    public BookDTO getBookBySlug(String aSlug) throws DataNotFoundException {
+    public BookDTO findBookBySlug(String aSlug) throws DataNotFoundException {
         return bookRepository.findBySlug(aSlug)
                 .map(BookDTO::of)
                 .orElseThrow(() -> new DataNotFoundException(Map.of("slug", aSlug), BookEntity.class.getName()));
@@ -71,13 +61,13 @@ public class BookService {
                 .getContent();
     }
 
-    public List<BookDTO> getBooksByGenreId(long aGenreId, int aOffset, int aLimit) {
+    public List<BookDTO> getPageByGenreId(long aGenreId, int aOffset, int aLimit) {
         return bookRepository.findByGenreId(aGenreId, PageRequest.of(aOffset / aLimit, aLimit))
                 .map(BookDTO::of)
                 .getContent();
     }
 
-    public List<BookDTO> getBooksByAuthorId(long aAuthorId, int aOffset, int aLimit) {
+    public List<BookDTO> getPageByAuthorId(long aAuthorId, int aOffset, int aLimit) {
         return bookRepository.findByAuthorId(aAuthorId, PageRequest.of(aOffset / aLimit, aLimit))
                 .map(BookDTO::of)
                 .getContent();

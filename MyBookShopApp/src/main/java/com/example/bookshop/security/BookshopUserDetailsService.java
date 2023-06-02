@@ -2,21 +2,17 @@ package com.example.bookshop.security;
 
 import com.example.bookshop.data.entities.user.UserEntity;
 import com.example.bookshop.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class BookshopUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public BookshopUserDetailsService(UserRepository aUserRepository) {
-        userRepository = aUserRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String aUsername) throws UsernameNotFoundException {

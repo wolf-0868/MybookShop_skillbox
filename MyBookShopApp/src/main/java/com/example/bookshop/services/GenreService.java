@@ -4,7 +4,7 @@ import com.example.bookshop.data.dto.GenreDTO;
 import com.example.bookshop.data.entities.genre.GenreEntity;
 import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.repositories.GenreRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +13,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class GenreService {
 
     private final GenreRepository repository;
-
-    @Autowired
-    public GenreService(GenreRepository aRepository) {
-        repository = aRepository;
-    }
 
     public List<GenreDTO> getAllGenres() {
         return repository.findAll()

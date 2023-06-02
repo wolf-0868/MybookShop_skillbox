@@ -5,7 +5,7 @@ import com.example.bookshop.data.dto.SlugDTO;
 import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.services.AuthorService;
 import com.example.bookshop.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +14,11 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/authors", method = RequestMethod.GET)
+@RequiredArgsConstructor
 public class AuthorPageController {
 
     private final AuthorService authorService;
     private final BookService bookService;
-
-    @Autowired
-    public AuthorPageController(AuthorService aAuthorService, BookService aBookService) {
-        authorService = aAuthorService;
-        bookService = aBookService;
-    }
 
     @ModelAttribute
     public void addAttributes(Model aModel) {
@@ -41,7 +36,7 @@ public class AuthorPageController {
     public String booksByAuthorPage(@PathVariable(value = "authorSlug") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
         AuthorDTO author = authorService.findBySlug(aSlug.getName());
         aModel.addAttribute("authorDTO", author);
-        aModel.addAttribute("authorBooks", bookService.getBooksByAuthorId(author.getId(), 0, 6));
+        aModel.addAttribute("authorBooks", bookService.getPageByAuthorId(author.getId(), 0, 6));
         return "authors/slug";
     }
 

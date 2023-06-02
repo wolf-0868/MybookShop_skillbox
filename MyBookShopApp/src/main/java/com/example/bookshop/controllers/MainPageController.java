@@ -4,7 +4,7 @@ import com.example.bookshop.data.dto.GenreAndTag;
 import com.example.bookshop.data.dto.GenreDTO;
 import com.example.bookshop.services.BookService;
 import com.example.bookshop.services.GenreService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,16 +16,11 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/", method = RequestMethod.GET)
+@RequiredArgsConstructor
 public class MainPageController {
 
     private final BookService bookService;
     private final GenreService genreService;
-
-    @Autowired
-    public MainPageController(BookService aBookService, GenreService aGenreService) {
-        bookService = aBookService;
-        genreService = aGenreService;
-    }
 
     private static String getLevelTagGenre(GenreDTO aGenre) {
         int count = aGenre.getCountBooks();

@@ -5,7 +5,7 @@ import com.example.bookshop.data.dto.SlugDTO;
 import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.services.BookService;
 import com.example.bookshop.services.GenreService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +15,11 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/genres", method = RequestMethod.GET)
+@RequiredArgsConstructor
 public class GenresPageController {
 
-    private GenreService genreService;
-    private BookService bookService;
-
-    @Autowired
-    public GenresPageController(GenreService aGenreService, BookService aBookService) {
-        genreService = aGenreService;
-        bookService = aBookService;
-    }
+    private final GenreService genreService;
+    private final BookService bookService;
 
     @ModelAttribute
     protected void addAttributes(Model aModel) {
@@ -52,7 +47,7 @@ public class GenresPageController {
     public String getBooksByGenrePage(@PathVariable(value = "genreSlug") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
         GenreDTO genre = genreService.findBySlug(aSlug.getName());
         aModel.addAttribute("genreDTO", genre);
-        aModel.addAttribute("genreBooks", bookService.getBooksByGenreId(genre.getId(), 0, 20));
+        aModel.addAttribute("genreBooks", bookService.getPageByGenreId(genre.getId(), 0, 20));
         return "genres/slug";
     }
 

@@ -4,6 +4,7 @@ import com.example.bookshop.data.dto.SearchWordDTO;
 import com.example.bookshop.exceptions.BookshopException;
 import com.example.bookshop.exceptions.UserNotFountException;
 import com.example.bookshop.security.BookshopUserRegistrar;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,13 +13,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 
 @Log
 @ControllerAdvice
+@RequiredArgsConstructor
 public class ResponseWrapperAdvice {
 
     private final BookshopUserRegistrar bookshopUserRegistrar;
-
-    public ResponseWrapperAdvice(BookshopUserRegistrar aBookshopUserRegistrar) {
-        bookshopUserRegistrar = aBookshopUserRegistrar;
-    }
 
     @ModelAttribute
     protected void addAttributes(Model aModel) {

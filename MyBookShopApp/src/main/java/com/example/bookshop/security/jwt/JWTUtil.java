@@ -15,6 +15,7 @@ import java.util.function.Function;
 @Component
 public class JWTUtil {
 
+    /** Сутки в миллисекундах */
     private static long DAY = 1000 * 60 * 60 * 24;
 
     @Value("${auth.secret}")

@@ -6,7 +6,7 @@ import com.example.bookshop.data.payloads.LoginPassConfirmationPayload;
 import com.example.bookshop.exceptions.UserNotFountException;
 import com.example.bookshop.security.BookshopUserRegistrar;
 import com.example.bookshop.security.ConfirmationResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,14 +18,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthUserController {
 
     private final BookshopUserRegistrar bookshopUserRegistrar;
-
-    @Autowired
-    public AuthUserController(BookshopUserRegistrar aBookshopUserRegistrar) {
-        bookshopUserRegistrar = aBookshopUserRegistrar;
-    }
 
     @GetMapping(value = "/signin")
     public String signInPage() {

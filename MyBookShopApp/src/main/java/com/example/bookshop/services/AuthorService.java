@@ -4,7 +4,7 @@ import com.example.bookshop.data.dto.AuthorDTO;
 import com.example.bookshop.data.entities.AuthorEntity;
 import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.repositories.AuthorRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,14 +13,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorService {
 
-    private AuthorRepository repository;
-
-    @Autowired
-    public AuthorService(AuthorRepository aRepository) {
-        repository = aRepository;
-    }
+    private final AuthorRepository repository;
 
     public List<AuthorDTO> getAllAuthors() {
         return repository.findAll()

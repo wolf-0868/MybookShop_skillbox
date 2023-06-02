@@ -6,7 +6,7 @@ import com.example.bookshop.data.dto.page.BooksPageDTO;
 import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.services.AuthorService;
 import com.example.bookshop.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,16 +15,11 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/books/author", method = {RequestMethod.GET, RequestMethod.POST})
+@RequiredArgsConstructor
 public class AuthorBookPageController {
 
     private final BookService bookService;
     private final AuthorService authorService;
-
-    @Autowired
-    public AuthorBookPageController(BookService aBookService, AuthorService aAuthorService) {
-        bookService = aBookService;
-        authorService = aAuthorService;
-    }
 
     @ModelAttribute
     public void addAttributes(Model aModel) {
@@ -38,7 +33,7 @@ public class AuthorBookPageController {
     public String booksByAuthorPage(@PathVariable(value = "authorSlug") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
         AuthorDTO author = authorService.findBySlug(aSlug.getName());
         aModel.addAttribute("authorDTO", author);
-        aModel.addAttribute("authorBooks", bookService.getBooksByAuthorId(author.getId(), 0, 20));
+        aModel.addAttribute("authorBooks", bookService.getPageByAuthorId(author.getId(), 0, 20));
         return "books/author";
     }
 
@@ -48,7 +43,7 @@ public class AuthorBookPageController {
             @PathVariable(value = "authorId", required = false) Long aAuthorId,
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) throws DataNotFoundException {
-        return new BooksPageDTO(bookService.getBooksByAuthorId(authorService.findById(aAuthorId).getId(), aOffset, aLimit));
+        return new BooksPageDTO(bookService.getPageByAuthorId(authorService.findById(aAuthorId).getId(), aOffset, aLimit));
     }
 
 }

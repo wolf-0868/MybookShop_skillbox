@@ -7,27 +7,28 @@ import com.example.bookshop.repositories.BookRepository;
 import com.example.bookshop.repositories.BookReviewRepository;
 import com.example.bookshop.repositories.UserRepository;
 import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class BookReviewService {
 
     private final BookReviewRepository bookReviewRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
 
-    @Autowired
-    public BookReviewService(BookReviewRepository aBookReviewRepository, BookRepository aBookRepository, UserRepository aUserRepository) {
-        bookReviewRepository = aBookReviewRepository;
-        bookRepository = aBookRepository;
-        userRepository = aUserRepository;
+    public List<BookReviewDTO> getAll() {
+        return bookReviewRepository.findAll()
+                .stream()
+                .map(BookReviewDTO::of)
+                .collect(Collectors.toList());
     }
 
-    public List<BookReviewDTO> getReviewsByBookId(long aBookId) {
+    public List<BookReviewDTO> findReviewsByBookId(long aBookId) {
         return bookReviewRepository.findByBookId(aBookId)
                 .stream()
                 .map(BookReviewDTO::of)
@@ -46,10 +47,4 @@ public class BookReviewService {
         return entity;
     }
 
-    public List<BookReviewDTO> getAll() {
-        return bookReviewRepository.findAll()
-                .stream()
-                .map(BookReviewDTO::of)
-                .collect(Collectors.toList());
-    }
 }

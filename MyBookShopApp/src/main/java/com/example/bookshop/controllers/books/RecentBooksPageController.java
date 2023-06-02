@@ -2,7 +2,7 @@ package com.example.bookshop.controllers.books;
 
 import com.example.bookshop.data.dto.page.BooksPageDTO;
 import com.example.bookshop.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,14 +12,10 @@ import java.time.LocalDate;
 
 @Controller
 @RequestMapping(value = "/books/recent", method = {RequestMethod.GET, RequestMethod.POST})
+@RequiredArgsConstructor
 public class RecentBooksPageController {
 
     private final BookService bookService;
-
-    @Autowired
-    public RecentBooksPageController(BookService aBookService) {
-        bookService = aBookService;
-    }
 
     @ModelAttribute
     protected void addAttributes(Model aModel) {

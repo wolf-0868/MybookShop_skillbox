@@ -9,14 +9,15 @@ import com.example.bookshop.exceptions.UserNotFountException;
 import com.example.bookshop.security.BookshopUserRegistrar;
 import com.example.bookshop.security.ConfirmationResponse;
 import com.example.bookshop.services.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Log
 @Controller
+@RequiredArgsConstructor
 public class SlugBookPageController {
 
     private final BookReviewService bookReviewService;
@@ -26,25 +27,15 @@ public class SlugBookPageController {
     private final AuthorService authorService;
     private final GenreService genreService;
 
-    @Autowired
-    public SlugBookPageController(BookReviewService aBookReviewService, BookshopUserRegistrar aBookshopUserRegistrar, Book2UserService aBook2UserService, BookService aBookService, AuthorService aAuthorService, GenreService aGenreService) {
-        bookReviewService = aBookReviewService;
-        bookshopUserRegistrar = aBookshopUserRegistrar;
-        book2UserService = aBook2UserService;
-        bookService = aBookService;
-        authorService = aAuthorService;
-        genreService = aGenreService;
-    }
-
     @GetMapping(value = "/books/{slugBook}")
-    public String slugPage(@PathVariable(value = "slugBook") SlugDTO aSlug, Model aModel) throws UserNotFountException, DataNotFoundException {
-        BookDTO book = bookService.getBookBySlug(aSlug.getName());
+    public String slugPage(@PathVariable(value = "slugBook") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
+        BookDTO book = bookService.findBookBySlug(aSlug.getName());
         aModel.addAttribute("bookDTO", book);
-        aModel.addAttribute("bookReviews", bookReviewService.getReviewsByBookId(book.getId()));
+        aModel.addAttribute("bookReviews", bookReviewService.findReviewsByBookId(book.getId()));
         aModel.addAttribute("bookAuthors", authorService.findByBookId(book.getId()));
         aModel.addAttribute("bookGenres", genreService.findByBookId(book.getId()));
         try {
-            aModel.addAttribute("bookStatuses", book2UserService.getAllBindingTypesByBook(book.getId(), bookshopUserRegistrar.getCurrentIdUser()));
+            aModel.addAttribute("bookStatuses", book2UserService.findBindingTypesByBookForUser(book.getId(), bookshopUserRegistrar.getCurrentIdUser()));
         } catch (UserNotFountException e) {
             log.fine("Пользователь не авторизирован");
         }
@@ -58,7 +49,7 @@ public class SlugBookPageController {
         if (!aPayload.getBooksIds()
                 .isEmpty() && (aPayload.getStatus() != null)) {
             for (Long id : aPayload.getBooksIds()) {
-                book2UserService.changeBookindingType(id, bookshopUserRegistrar.getCurrentIdUser(), aPayload.getStatus());
+                book2UserService.changeBookBindingType(id, bookshopUserRegistrar.getCurrentIdUser(), aPayload.getStatus());
             }
             response.setResult("true");
         } else {
@@ -69,7 +60,7 @@ public class SlugBookPageController {
 
     @PostMapping(value = "/addBookReviewAction")
     public String saveReview(@RequestParam("bookid") Long aBookId, @ModelAttribute("action") String aAction, @ModelAttribute("review-text") String aText) throws UserNotFountException, DataNotFoundException {
-        BookDTO book = bookService.FindById(aBookId);
+        BookDTO book = bookService.findById(aBookId);
         if ("confirm".equals(aAction)) {
             bookReviewService.saveNewReview(DraftBookReviewDTO.builder()
                     .bookId(book.getId())

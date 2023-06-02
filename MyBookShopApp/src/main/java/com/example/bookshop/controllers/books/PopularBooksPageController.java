@@ -2,21 +2,17 @@ package com.example.bookshop.controllers.books;
 
 import com.example.bookshop.data.dto.page.BooksPageDTO;
 import com.example.bookshop.services.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping(value = "/books/popular", method = {RequestMethod.GET, RequestMethod.POST})
+@RequiredArgsConstructor
 public class PopularBooksPageController {
 
     private final BookService bookService;
-
-    @Autowired
-    public PopularBooksPageController(BookService aBookService) {
-        bookService = aBookService;
-    }
 
     @ModelAttribute
     protected void addAttributes(Model aModel) {

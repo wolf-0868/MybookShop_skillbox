@@ -2,6 +2,7 @@ package com.example.bookshop.security.jwt;
 
 import com.example.bookshop.security.BookshopUserDetails;
 import com.example.bookshop.security.BookshopUserDetailsService;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -16,15 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@AllArgsConstructor
 public class JWTRequestFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
     private final BookshopUserDetailsService bookshopUserDetailsService;
-
-    public JWTRequestFilter(JWTUtil aJwtUtil, BookshopUserDetailsService aBookshopUserDetailsService) {
-        jwtUtil = aJwtUtil;
-        bookshopUserDetailsService = aBookshopUserDetailsService;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest aRequest, HttpServletResponse aResponse, FilterChain aFilterChain) throws ServletException, IOException {

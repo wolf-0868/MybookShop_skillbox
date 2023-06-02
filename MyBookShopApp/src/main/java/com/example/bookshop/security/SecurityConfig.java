@@ -1,7 +1,7 @@
 package com.example.bookshop.security;
 
 import com.example.bookshop.security.jwt.JWTRequestFilter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,17 +15,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final BookshopUserDetailsService bookshopUserDetailsService;
-
     private final JWTRequestFilter filter;
-
-    @Autowired
-    public SecurityConfig(BookshopUserDetailsService aBookshopUserDetailsService, JWTRequestFilter aFilter) {
-        bookshopUserDetailsService = aBookshopUserDetailsService;
-        filter = aFilter;
-    }
 
     @Bean
     PasswordEncoder getPasswordEncoder() {
