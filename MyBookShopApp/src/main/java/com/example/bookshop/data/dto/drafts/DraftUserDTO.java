@@ -13,6 +13,9 @@ import lombok.*;
 @AllArgsConstructor
 public class DraftUserDTO {
 
+    @JsonProperty(value = "id")
+    private Long id;
+
     @JsonProperty(value = "name")
     private String name;
 

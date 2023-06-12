@@ -6,20 +6,23 @@ import com.example.bookshop.data.dto.drafts.DraftUserDTO;
 import com.example.bookshop.data.entities.user.UserEntity;
 import com.example.bookshop.data.payloads.ContactConfirmationPayload;
 import com.example.bookshop.data.payloads.LoginPassConfirmationPayload;
+import com.example.bookshop.exceptions.BookshopUserRegistrarException;
 import com.example.bookshop.exceptions.UserNotFountException;
 import com.example.bookshop.repositories.UserRepository;
 import com.example.bookshop.security.jwt.JWTUtil;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookshopUserRegistrar {
 
     private final JWTUtil jwtUtil;
@@ -28,54 +31,50 @@ public class BookshopUserRegistrar {
     private final AuthenticationManager authenticationManager;
     private final BookshopUserDetailsService bookshopUserDetailsService;
 
-
-    @Autowired
-    public BookshopUserRegistrar(JWTUtil aJwtUtil, UserRepository aUserRepository, PasswordEncoder aPasswordEncoder, AuthenticationManager aAuthenticationManager, BookshopUserDetailsService aBookshopUserDetailsService) {
-        jwtUtil = aJwtUtil;
-        userRepository = aUserRepository;
-        passwordEncoder = aPasswordEncoder;
-        authenticationManager = aAuthenticationManager;
-        bookshopUserDetailsService = aBookshopUserDetailsService;
-    }
-
     public UserDTO registerNewUser(DraftUserDTO aDraftUserDTO) {
-        if (userRepository.findByEmail(aDraftUserDTO.getEmail()) == null) {
+        UserEntity userByEmail = userRepository.findByEmail(aDraftUserDTO.getEmail());
+        UserEntity userByPhone = userRepository.findByPhone(aDraftUserDTO.getPhone());
+
+        if (userByEmail == null && userByPhone == null) {
             UserEntity user = new UserEntity();
             user.setName(aDraftUserDTO.getName());
             user.setEmail(aDraftUserDTO.getEmail());
             user.setPhone(aDraftUserDTO.getPhone());
             user.setPassword(passwordEncoder.encode(aDraftUserDTO.getPassword()));
-            return Optional.ofNullable(userRepository.save(user))
-                    .map(UserDTO::of)
-                    .orElse(null);
+            return UserDTO.of(userRepository.save(user));
+        } else {
+            return UserDTO.of(userByPhone);
         }
-        return null;
-    }
-
-    public ConfirmationResponse login(ContactConfirmationPayload aPayload) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(aPayload.getContact(), aPayload.getCode()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        ConfirmationResponse response = new ConfirmationResponse();
-        response.setResult("true");
-        return response;
     }
 
     public ConfirmationResponse jwtLogin(LoginPassConfirmationPayload aPayload) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(aPayload.getLogin(), aPayload.getPassword()));
-        BookshopUserDetails userDetails = (BookshopUserDetails) bookshopUserDetailsService.loadUserByUsername(aPayload.getLogin());
+        UserDetails userDetails = bookshopUserDetailsService.loadUserByUsername(aPayload.getLogin());
         String jwtToken = jwtUtil.generateToken(userDetails);
         ConfirmationResponse response = new ConfirmationResponse();
         response.setResult(jwtToken);
         return response;
     }
 
-    private UserEntity getCurrentUserEntity() throws UserNotFountException {
+    public ConfirmationResponse jwtLoginByPhoneNumber(ContactConfirmationPayload aPayload) {
+        DraftUserDTO draft = new DraftUserDTO();
+        draft.setPhone(aPayload.getContact());
+        draft.setPassword(aPayload.getCode());
+        registerNewUser(draft);
+        UserDetails userDetails = bookshopUserDetailsService.loadUserByUsername(aPayload.getContact());
+        String jwtToken = jwtUtil.generateToken(userDetails);
+        ConfirmationResponse response = new ConfirmationResponse();
+        response.setResult(jwtToken);
+        return response;
+    }
+
+    public UserEntity getCurrentUserEntity() throws UserNotFountException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return Optional.ofNullable(authentication.getPrincipal())
                 .filter(BookshopUserDetails.class::isInstance)
                 .map(BookshopUserDetails.class::cast)
                 .map(BookshopUserDetails::getUser)
-                .orElseThrow(() -> new UserNotFountException("Отсутствует текущий пользователь"));
+                .orElseThrow(() -> new UserNotFountException("Пользователь не авторизован"));
     }
 
     public UserDTO getCurrentUser() throws UserNotFountException {
@@ -90,13 +89,36 @@ public class BookshopUserRegistrar {
         return getCurrentUserEntity().getId();
     }
 
-    public void updateCurrentUser(DraftUserDTO aDraftUserDTO) throws UserNotFountException {
+    public void updateCurrentUser(DraftUserDTO aDraftUserDTO) throws UserNotFountException, BookshopUserRegistrarException {
         UserEntity user = getCurrentUserEntity();
-        user.setName(aDraftUserDTO.getName());
-        user.setEmail(aDraftUserDTO.getEmail());
-        user.setPhone(aDraftUserDTO.getPhone());
-        user.setPassword(passwordEncoder.encode(aDraftUserDTO.getPassword()));
+        fillUserEntity(aDraftUserDTO, user);
         userRepository.save(user);
+    }
+
+    public void updateUser(DraftUserDTO aDraftUserDTO) throws UserNotFountException, BookshopUserRegistrarException {
+        UserEntity user = userRepository.findById(aDraftUserDTO.getId())
+                .orElseThrow(() -> new UserNotFountException("Не удалось найти пользователя с идентификатором '%d'", aDraftUserDTO.getId()));
+        fillUserEntity(aDraftUserDTO, user);
+        userRepository.save(user);
+    }
+
+    private void fillUserEntity(DraftUserDTO aDraftUserDTO, UserEntity aUserEntity) throws BookshopUserRegistrarException {
+        if (!aDraftUserDTO.getEmail()
+                .equals(aUserEntity.getEmail())) {
+            if (userRepository.existsByEmail(aDraftUserDTO.getEmail())) {
+                throw new BookshopUserRegistrarException("Пользователь с почтой - '%s' уже зарегистрирован");
+            }
+            aUserEntity.setEmail(aDraftUserDTO.getEmail());
+        }
+        if (!aDraftUserDTO.getPhone()
+                .equals(aUserEntity.getPhone())) {
+            if (userRepository.existsByPhone(aDraftUserDTO.getPhone())) {
+                throw new BookshopUserRegistrarException("Пользователь с телефоном - '%s' уже зарегистрирован");
+            }
+            aUserEntity.setPhone(aDraftUserDTO.getPhone());
+        }
+        aUserEntity.setName(aDraftUserDTO.getName());
+        aUserEntity.setPassword(passwordEncoder.encode(aDraftUserDTO.getPassword()));
     }
 
 }

@@ -59,7 +59,10 @@ public class SlugBookPageController {
     }
 
     @PostMapping(value = "/addBookReviewAction")
-    public String saveReview(@RequestParam("bookid") Long aBookId, @ModelAttribute("action") String aAction, @ModelAttribute("review-text") String aText) throws UserNotFountException, DataNotFoundException {
+    public String saveReview(
+            @RequestParam("bookid") Long aBookId,
+            @ModelAttribute("action") String aAction,
+            @ModelAttribute("review-text") String aText) throws UserNotFountException, DataNotFoundException {
         BookDTO book = bookService.findById(aBookId);
         if ("confirm".equals(aAction)) {
             bookReviewService.saveNewReview(DraftBookReviewDTO.builder()

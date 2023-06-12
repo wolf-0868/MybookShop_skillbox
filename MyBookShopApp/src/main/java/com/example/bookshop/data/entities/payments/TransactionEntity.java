@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BalanceTransactionEntity {
+public class TransactionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +31,7 @@ public class BalanceTransactionEntity {
     private Integer value = 0;
 
     @ManyToOne
-    @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "balance_transaction_book_fk"), nullable = false)
+    @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "balance_transaction_book_fk"))
     private BookEntity book;
 
     @Column(name = "description", columnDefinition = "TEXT", nullable = false)

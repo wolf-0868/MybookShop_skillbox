@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConfirmationResponse {
+public class MessageConfirmationResponse extends ConfirmationResponse {
 
-    protected String result;
+    private String message;
 
 }

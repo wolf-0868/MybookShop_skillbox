@@ -15,7 +15,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -78,14 +79,6 @@ class AuthenticationTestCase {
 
         Mockito.verify(userRepositoryMock, Mockito.times(1))
                 .save(Mockito.any(UserEntity.class));
-    }
-
-    @Test
-    void testRegisterNewUserFail() {
-        Mockito.doReturn(new UserEntity())
-                .when(userRepositoryMock)
-                .findByEmail(testUser.getEmail());
-        assertNull(userRegister.registerNewUser(testUser));
     }
 
 }

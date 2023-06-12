@@ -1,10 +1,10 @@
 package com.example.bookshop.security.jwt;
 
-import com.example.bookshop.security.BookshopUserDetails;
 import com.example.bookshop.security.BookshopUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -40,8 +40,7 @@ public class JWTRequestFilter extends OncePerRequestFilter {
                 }
 
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    BookshopUserDetails userDetails = (BookshopUserDetails) bookshopUserDetailsService.loadUserByUsername(username);
-
+                    UserDetails userDetails = bookshopUserDetailsService.loadUserByUsername(username);
                     if (jwtUtil.validateToken(token, userDetails)) {
                         UsernamePasswordAuthenticationToken authenticationToken =
                                 new UsernamePasswordAuthenticationToken(

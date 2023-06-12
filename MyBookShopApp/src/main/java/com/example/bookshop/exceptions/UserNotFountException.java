@@ -6,4 +6,8 @@ public class UserNotFountException extends BookshopException {
         super(aMessage);
     }
 
+    public UserNotFountException(String aFormat, Object... aArgs) {
+        super(String.format(aFormat, aArgs));
+    }
+
 }

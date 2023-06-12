@@ -21,66 +21,82 @@
 <div class="Middle">
   <div class="Middle-top">
     <div class="wrap">
-      <h1 class="Middle-title">Личный кабинет</h1>
+      <h1 class="Middle-title" th:text="#{profile-page.title}">Личный кабинет</h1>
     </div>
   </div>
   <div class="wrap">
     <main class="Middle-main">
-      <h2 class="Middle-title">Мой профиль</h2>
+      <h2 class="Middle-title" th:text="#{profile-page.my-profile}">Мой профиль</h2>
       <div class="Tabs Tabs_default">
         <div class="Tabs-links">
-          <a class="Tabs-link Tabs-link_ACTIVE" href="#basic">Основные сведения</a>
-          <a class="Tabs-link" href="#transactions">История транзакций</a>
-          <a class="Tabs-link" href="#topup">Пополнить счет</a>
+          <a class="Tabs-link Tabs-link_ACTIVE" href="#basic" th:text="#{profile-page.basic-info}">Основные сведения</a>
+          <a class="Tabs-link" href="#transactions" th:text="#{profile-page.history-transactions}">История
+            транзакций</a>
+          <a class="Tabs-link" href="#topup" th:text="#{profile-page.top-up-balance}">Пополнить счет</a>
         </div>
         <div class="Tabs-wrap">
           <div class="Tabs-block" id="basic">
             <div class="Profile">
-              <form action="#" class="form Profile-form" method="post" th:action="@{/updateCurrentUser}"
+              <form action="#" class="form Profile-form" method="post" th:action="@{/updateUser}"
                     th:object="${draftUserDTO}">
                 <div class="row">
                   <div class="row-block">
                     <div class="form-group">
-                      <label class="form-label" for="name">Имя</label>
+                      <label class="form-label" for="name" th:text="#{profile-page.name}">Имя</label>
                       <input class="form-input" id="name" name="name" th:field="*{name}" th:value="*{name}" type="text"
                              value="Михаил"/>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="mail">E-mail</label>
+                      <label class="form-label" for="mail" th:text="#{profile-page.email}">E-mail</label>
                       <input class="form-input" data-validate="require mail" id="mail" name="mail"
                              th:field="*{email}" th:value="*{email}"
                              type="text" value="addr@sait.com"/>
                       <div class="Profile-btn Profile-btn_confirm">
-                        <button class="btn btn_primary" type="button">Подтвердить</button>
+                        <button class="btn btn_primary" th:text="#{profile-page.confirm}" type="button">Подтвердить
+                        </button>
                       </div>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="phone">Телефон</label>
+                      <label class="form-label" for="phone" th:text="#{profile-page.phone}">Телефон</label>
                       <input class="form-input" data-mask="+7 (999) 999-99-99" data-validate="require" id="phone"
                              name="phone" th:field="*{phone}" th:value="*{phone}" type="text" value="+70000000000"/>
                       <div class="Profile-btn Profile-btn_confirm">
-                        <button class="btn btn_primary" type="button">Подтвердить</button>
+                        <button class="btn btn_primary" th:text="#{profile-page.confirm}" type="button">Подтвердить
+                        </button>
                       </div>
                     </div>
                   </div>
                   <div class="row-block">
                     <div class="form-group">
-                      <label class="form-label" for="password">Пароль</label>
-                      <input class="form-input" id="password" name="password" placeholder="Тут можно изменить пароль"
-                             th:field="*{password}" th:value="*{password}" type="password"/>
+                      <label class="form-label" for="password" th:text="#{profile-page.password}">Пароль</label>
+                      <input class="form-input" id="password" name="password"
+                             placeholder="Тут можно изменить пароль" th:field="*{password}"
+                             th:placeholder="#{profile-page.change-password}" th:value="*{password}" type="password"/>
                     </div>
                     <div class="form-group">
-                      <label class="form-label" for="passwordReply">Подтверждение пароля</label>
+                      <label class="form-label" for="passwordReply" th:text="#{profile-page.confirmation-password}">Подтверждение
+                        пароля</label>
                       <input class="form-input" id="passwordReply" name="passwordReply"
                              placeholder="Введите пароль повторно" th:field="*{passwordReply}"
+                             th:placeholder="#{profile-page.enter-password-reply}"
                              th:value="*{passwordReply}" type="password"/>
                     </div>
                     <div class="form-group">
                       <div class="Profile-btn">
-                        <button class="btn btn_danger" type="button">Отменить</button>
-                        <button class="btn btn_primary" type="submit">Сохранить</button>
+                        <button class="btn btn_danger" th:text="#{profile-page.cancel}" type="button">Отменить</button>
+                        <button class="btn btn_primary update-user-post" th:text="#{profile-page.save}" type="submit">
+                          Сохранить
+                        </button>
                       </div>
-                      <div class="Profile-success">Профиль успешно сохранен</div>
+                      <div th:if="${updateResponse} != null">
+                        <div class="Profile-success" th:if="${updateResponse.getResult()}"
+                             th:text="#{profile-page.profile-saved-successfully}">Профиль успешно сохранен
+                        </div>
+                        <div class="Profile-success"
+                             th:if="${!updateResponse.getResult()}"
+                             th:text="${updateResponse.getMessage()}">Ошибка сохранения
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -93,67 +109,53 @@
                 <table class="table table_noMargin">
                   <thead>
                   <tr>
-                    <th>Дата и время</th>
-                    <th>Сумма</th>
-                    <th>Описание</th>
+                    <th th:text="#{profile-page.datetime}">Дата и время</th>
+                    <th th:text="#{profile-page.sum}">Сумма</th>
+                    <th th:text="#{profile-page.description}">Описание</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <td>15 мая 2017 10:03</td>
+
+                  <tr th:each="transaction : ${transactions.getTransactions()}">
+                    <td th:text="${transaction.getDateTimeText()}"></td>
                     <td>
                       <span class="Transactions_textSuccess">
-                        <strong>+500 р.</strong>
+                        <strong th:text="${transaction.getValueText()} + ' р.'"></strong>
                       </span>
                     </td>
-                    <td>Пополнение счета</td>
+                    <td th:text="${transaction.getDescription()}">Пополнение счёта</td>
                   </tr>
-                  <tr>
-                    <td>5 марта 2017 13:40</td>
-                    <td>
-                      <span class="Transactions_textSuccess">
-                        <strong>-480 р.</strong>
-                      </span>
-                    </td>
-                    <td>Покупка книги&#32;<a href="/books/slug.html">История Беларуси</a></td>
-                  </tr>
-                  <tr>
-                    <td>1 февраля 2017 04:10</td>
-                    <td>
-                      <span class="Transactions_textSuccess">
-                        <strong>+10 000 р.</strong>
-                      </span>
-                    </td>
-                    <td>Пополнение с помощью WebMoney</td>
-                  </tr>
-                  <tr>
-                    <td>1 января 2017 09:33</td>
-                    <td>
-                      <span class="Transactions_textSuccess">
-                        <strong>+7 896 р.</strong>
-                      </span>
-                    </td>
-                    <td>Пополнение с помощью Яндекс.Деньги</td>
-                  </tr>
+
+                  <!-- <tr>-->
+                  <!-- <td>5 марта 2017 13:40</td>-->
+                  <!-- <td>-->
+                  <!-- <span class="Transactions_textSuccess">-->
+                  <!-- <strong>-480 р.</strong>-->
+                  <!-- </span>-->
+                  <!-- </td>-->
+                  <!-- <td>Покупка книги&#32;<a href="/books/slug.html">История Беларуси</a></td>-->
+                  <!-- </tr>-->
+
                   </tbody>
                 </table>
               </div>
               <div class="Transactions-footer Transactions-footer_center">
                 <a class="btn btn_primary Transactions-get" data-transactionlimit="10" data-transactionoffset="4"
-                   data-transactionsort="asc" href="#">Показать еще</a>
+                   data-transactionsort="asc" href="#" th:text="#{profile-page.show-more}">Показать еще</a>
               </div>
             </div>
           </div>
           <div class="Tabs-block" id="topup">
             <form action="#" class="form Topup" data-sendHash="34534535" method="post">
               <div class="Topup-wrap">
-                <strong class="Topup-title">Введите сумму, на которую хотите пополнить свой счет:</strong>
+                <strong class="Topup-title" th:text="#{profile-page.enter-sum-msg}">Введите сумму, на которую хотите
+                  пополнить свой счет:</strong>
                 <div class="form-group form-group_row Topup-group">
-                  <input class="form-input" id="sum" name="sum" type="text"/><span>рублей</span>
+                  <input class="form-input" id="sum" name="sum" type="text"/><span th:text="#{profile-page.rubles}">рублей</span>
                 </div>
                 <div class="form-group">
                   <div class="Topup-btn">
-                    <button class="btn btn_primary">Пополнить</button>
+                    <button class="btn btn_primary" th:text="#{profile-page.top-up}">Пополнить</button>
                   </div>
                 </div>
               </div>

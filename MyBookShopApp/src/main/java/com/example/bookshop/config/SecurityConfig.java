@@ -1,5 +1,7 @@
-package com.example.bookshop.security;
+package com.example.bookshop.config;
 
+import com.example.bookshop.security.BookshopUserDetailsService;
+import com.example.bookshop.security.CustomLogoutSuccessHandler;
 import com.example.bookshop.security.jwt.JWTRequestFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
