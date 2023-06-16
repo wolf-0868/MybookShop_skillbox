@@ -271,6 +271,12 @@
                th:text="#{toolbar.populars}">Популярное</a>
           </li>
           <li class="menu-item">
+            <a class="menu-link" href="/books/recently.html"
+               th:classappend="${activePage == 'RECENTLY'} ? 'menu-item_ACTIVE' : null"
+               th:href="@{/books/recently}"
+               th:text="#{toolbar.recently}">Недавно просмотренные</a>
+          </li>
+          <li class="menu-item">
             <a class="menu-link" href="/authors/index.html"
                th:classappend="${activePage == 'AUTHORS'} ? 'menu-item_ACTIVE' : null"
                th:href="@{/authors}"

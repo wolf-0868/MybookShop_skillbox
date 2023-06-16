@@ -26,6 +26,7 @@ public class SlugBookPageController {
     private final BookService bookService;
     private final AuthorService authorService;
     private final GenreService genreService;
+    private final JournalService journalService;
 
     @GetMapping(value = "/books/{slugBook}")
     public String slugPage(@PathVariable(value = "slugBook") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
@@ -35,7 +36,9 @@ public class SlugBookPageController {
         aModel.addAttribute("bookAuthors", authorService.findByBookId(book.getId()));
         aModel.addAttribute("bookGenres", genreService.findByBookId(book.getId()));
         try {
-            aModel.addAttribute("bookStatuses", book2UserService.findBindingTypesByBookForUser(book.getId(), bookshopUserRegistrar.getCurrentIdUser()));
+            Long userId = bookshopUserRegistrar.getCurrentIdUser();
+            aModel.addAttribute("bookStatuses", book2UserService.findBindingTypesByBookForUser(book.getId(), userId));
+            journalService.logReviewBook(book.getId(), userId);
         } catch (UserNotFountException e) {
             log.fine("Пользователь не авторизирован");
         }
