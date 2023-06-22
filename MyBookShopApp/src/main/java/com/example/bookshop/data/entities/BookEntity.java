@@ -63,7 +63,10 @@ public class BookEntity {
     @Column(name = "discount", nullable = false)
     private Integer discount = 0;
 
-    @Column(name = "rating", nullable = false)
+    @Column(name = "rating")
     private double rating = 0;
+
+    @Column(name = "popularity")
+    private double popularity = 0;
 
 }

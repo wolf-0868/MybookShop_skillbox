@@ -52,13 +52,13 @@ class BookRepositoryTestCase {
 
     @Test
     void testFindAllOrderByRating() {
-        List<BookEntity> books = bookRepository.findAllOrderByRating(PageRequest.ofSize(100)).getContent();
-        assertTrue(Ordering.from(Comparator.comparingDouble(BookEntity::getRating).reversed()).isOrdered(books));
+        List<BookEntity> books = bookRepository.findAllOrderByPopularity(PageRequest.ofSize(100)).getContent();
+        assertTrue(Ordering.from(Comparator.comparingDouble(BookEntity::getPopularity).reversed()).isOrdered(books));
     }
 
     @Test
-    void testCalculateRatingForBook() {
-        assertNotNull(bookRepository.calculateRatingForBook(1L));
+    void testCalculatePopularityForBook() {
+        assertNotNull(bookRepository.calculatePopularityForBook(1L));
     }
 
 }

@@ -10,6 +10,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,10 @@ public class BookReviewService {
     private final BookReviewRepository bookReviewRepository;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+
+    private static double calculateRatingReview(BookReviewDTO aReview) {
+        return (double) aReview.getCountLikes() / (aReview.getCountLikes() + aReview.getCountDislikes());
+    }
 
     public List<BookReviewDTO> getAll() {
         return bookReviewRepository.findAll()
@@ -32,6 +37,7 @@ public class BookReviewService {
         return bookReviewRepository.findByBookId(aBookId)
                 .stream()
                 .map(BookReviewDTO::of)
+                .sorted(Comparator.comparingDouble(BookReviewService::calculateRatingReview))
                 .collect(Collectors.toList());
     }
 

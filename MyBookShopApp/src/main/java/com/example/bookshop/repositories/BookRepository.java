@@ -24,8 +24,8 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
 
     Page<BookEntity> findByTitleContainingIgnoreCase(String aBookTitle, Pageable aPageable);
 
-    @Query(nativeQuery = true, value = "SELECT * FROM book b ORDER BY rating DESC ")
-    Page<BookEntity> findAllOrderByRating(Pageable aPageable);
+    @Query(nativeQuery = true, value = "SELECT * FROM book b ORDER BY popularity DESC ")
+    Page<BookEntity> findAllOrderByPopularity(Pageable aPageable);
 
     @Query(value = "SELECT b2a.book FROM Book2GenreEntity b2a WHERE b2a.genre.id = :genre_id")
     Page<BookEntity> findByGenreId(
@@ -37,8 +37,16 @@ public interface BookRepository extends JpaRepository<BookEntity, Long> {
             @Param("author_id") long aAuthorId,
             Pageable aPageable);
 
+    @Query(nativeQuery = true, value = "SELECT calculate_book_popularity_function(:book_id)")
+    double calculatePopularityForBook(@Param("book_id") long aBookId);
+
     @Query(nativeQuery = true, value = "SELECT calculate_book_rating_function(:book_id)")
     double calculateRatingForBook(@Param("book_id") long aBookId);
+
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "UPDATE book SET popularity = calculate_book_popularity_function(:book_id) WHERE id = :book_id")
+    void refreshPopularity(@Param("book_id") long aBookId);
 
     @Modifying
     @Transactional

@@ -12,7 +12,7 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -39,7 +39,7 @@ class CartPageControllerTestCase {
         boolean result = book2UserRepository.existsBookByBindingType(1L, 1L, BookBindingType.CART);
 
         ChangeBookStatusPayload payload = new ChangeBookStatusPayload();
-        payload.setBooksIds(List.of(1L));
+        payload.setBooksIds(Set.of(1L));
         payload.setStatus(BookBindingType.CART);
 
         mockMvc.perform(post("/changeBookStatus")

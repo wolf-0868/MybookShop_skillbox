@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -38,4 +39,11 @@ public class BooksPageDTO {
         return books.stream()
                 .noneMatch(b -> b.getDiscount() == 0);
     }
+
+    public List<Long> getBookIds() {
+        return books.stream()
+                .map(BookDTO::getId)
+                .collect(Collectors.toList());
+    }
+
 }

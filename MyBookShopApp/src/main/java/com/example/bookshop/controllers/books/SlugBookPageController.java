@@ -3,7 +3,12 @@ package com.example.bookshop.controllers.books;
 import com.example.bookshop.data.dto.BookDTO;
 import com.example.bookshop.data.dto.SlugDTO;
 import com.example.bookshop.data.dto.drafts.DraftBookReviewDTO;
+import com.example.bookshop.data.dto.page.BookStatusesPageDTO;
+import com.example.bookshop.data.dto.page.RatingBookPage;
 import com.example.bookshop.data.payloads.ChangeBookStatusPayload;
+import com.example.bookshop.data.payloads.RateBookPayload;
+import com.example.bookshop.data.payloads.RateBookReviewPayload;
+import com.example.bookshop.exceptions.BookshopException;
 import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.exceptions.UserNotFountException;
 import com.example.bookshop.security.BookshopUserRegistrar;
@@ -27,6 +32,7 @@ public class SlugBookPageController {
     private final AuthorService authorService;
     private final GenreService genreService;
     private final JournalService journalService;
+    private final RatingBookService ratingBookService;
 
     @GetMapping(value = "/books/{slugBook}")
     public String slugPage(@PathVariable(value = "slugBook") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
@@ -35,9 +41,11 @@ public class SlugBookPageController {
         aModel.addAttribute("bookReviews", bookReviewService.findReviewsByBookId(book.getId()));
         aModel.addAttribute("bookAuthors", authorService.findByBookId(book.getId()));
         aModel.addAttribute("bookGenres", genreService.findByBookId(book.getId()));
+        aModel.addAttribute("bookRatings", new RatingBookPage(ratingBookService.getGroupingRating(book.getId())));
         try {
             Long userId = bookshopUserRegistrar.getCurrentIdUser();
-            aModel.addAttribute("bookStatuses", book2UserService.findBindingTypesByBookForUser(book.getId(), userId));
+            aModel.addAttribute("ratingForUser", ratingBookService.getRatingBookForUser(userId, book.getId()));
+            aModel.addAttribute("bookStatuses", new BookStatusesPageDTO(book2UserService.findBindingTypesByBookForUser(book.getId(), userId)));
             journalService.logReviewBook(book.getId(), userId);
         } catch (UserNotFountException e) {
             log.fine("Пользователь не авторизирован");
@@ -47,22 +55,32 @@ public class SlugBookPageController {
 
     @ResponseBody
     @PostMapping(value = "/changeBookStatus")
-    public ConfirmationResponse changeBookStatus(@RequestBody ChangeBookStatusPayload aPayload) throws UserNotFountException {
+    public ConfirmationResponse handleChangeBookStatus(@RequestBody ChangeBookStatusPayload aPayload) throws BookshopException {
         ConfirmationResponse response = new ConfirmationResponse();
-        if (!aPayload.getBooksIds()
-                .isEmpty() && (aPayload.getStatus() != null)) {
-            for (Long id : aPayload.getBooksIds()) {
-                book2UserService.changeBookBindingType(id, bookshopUserRegistrar.getCurrentIdUser(), aPayload.getStatus());
-            }
-            response.setResult("true");
-        } else {
+        if (aPayload.getBooksIds().isEmpty() || (aPayload.getStatus() == null)) {
             response.setResult("false");
+        } else if (aPayload.getBooksIds().size() == 1) {
+            book2UserService.changeBookBindingType(aPayload.getBooksIds()
+                    .iterator()
+                    .next(), bookshopUserRegistrar.getCurrentIdUser(), aPayload.getStatus());
+        } else {
+            switch (aPayload.getStatus()) {
+                case PAID:
+                    book2UserService.buyBooks(aPayload.getBooksIds(), bookshopUserRegistrar.getCurrentIdUser());
+                    break;
+                case CART:
+                    book2UserService.addToCart(aPayload.getBooksIds(), bookshopUserRegistrar.getCurrentIdUser());
+                    break;
+                default:
+                    throw new UserNotFountException("Групповое изменение статуса '%s' не реализована", aPayload.getStatus());
+            }
         }
+        response.setResult("true");
         return response;
     }
 
     @PostMapping(value = "/addBookReviewAction")
-    public String saveReview(
+    public String handleSaveReview(
             @RequestParam("bookid") Long aBookId,
             @ModelAttribute("action") String aAction,
             @ModelAttribute("review-text") String aText) throws UserNotFountException, DataNotFoundException {
@@ -75,6 +93,26 @@ public class SlugBookPageController {
                     .build());
         }
         return ("redirect:/books/" + book.getSlug());
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/rateBook")
+    public ConfirmationResponse handleRateBook(@RequestBody RateBookPayload aPayload) throws UserNotFountException {
+        ConfirmationResponse response = new ConfirmationResponse();
+        response.setResult("false");
+        ratingBookService.updateRatingBook(aPayload.getBookId(), bookshopUserRegistrar.getCurrentIdUser(), aPayload.getValue());
+        response.setResult("true");
+        return response;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "/rateBookReview")
+    public ConfirmationResponse handleRateBookReview(@RequestBody RateBookReviewPayload aPayload) throws UserNotFountException {
+        ConfirmationResponse response = new ConfirmationResponse();
+        response.setResult("false");
+        ratingBookService.updateRatingBookReview(aPayload.getReviewId(), bookshopUserRegistrar.getCurrentIdUser(), aPayload.getValue());
+        response.setResult("true");
+        return response;
     }
 
 }

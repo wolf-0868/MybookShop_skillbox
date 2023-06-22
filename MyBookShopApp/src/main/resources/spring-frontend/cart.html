@@ -22,15 +22,16 @@
   <div class="wrap">
     <main class="Middle-main">
       <h1 class="Middle-title" th:text="#{cart-page.title}">Корзина</h1>
-      <form action="#" class="form Cart" method="post">
+      <form action="#" class="form Cart Cart_buy" method="post">
         <div class="Cart-messageInfo" th:if="${bookCartsPage.getBooks().isEmpty()}" th:text="#{cart-page.cart-empty}">
           Корзина пуста
         </div>
         <div class="Cart-product" th:each="book : ${bookCartsPage.getBooks()}">
           <div class="Cart-block Cart-block_row">
             <div class="Cart-block Cart-block_pict">
-              <a class="Cart-pict" href="#">
-                <img alt="card.jpg" class="Cart-img" src="/assets/img/content/main/card.jpg"/>
+              <a class="Cart-pict" href="#" th:href="@{'/books/' + ${book.getSlug()}}">
+                <img alt="card.jpg" class="Cart-img" src="/assets/img/content/main/card.jpg"
+                     th:src="${book.getImage()}"/>
               </a>
             </div>
             <div class="Cart-block Cart-block_row">
@@ -39,68 +40,26 @@
                   <a href="#" th:text="${book.getAuthorsText()}">Борис Васильевич Бедный</a>
                 </div>
                 <div class="Cart-title">
-                  <a href="#" th:text="${book.getTitle()}">Жизнь</a>
+                  <a href="#" th:href="@{'/books/' + ${book.getSlug()}}" th:text="${book.getTitle()}">Жизнь</a>
                 </div>
                 <div class="Cart-rating">
-                    <span class="Rating">
-                      <span class="Rating-stars">
-                        <span class="Rating-star Rating-star_view">
-                          <svg height="18" viewBox="0 0 19 18" width="19" xmlns="http://www.w3.org/2000/svg">
+                  <span class="Rating">
+                    <span class="Rating-stars">
+                      <span class="Rating-star"
+                            th:classappend="${book.getRating() < i} ? null : 'Rating-star_view'"
+                            th:each="i : ${#numbers.sequence(1, 5)}">
+                        <svg height="18" viewBox="0 0 19 18" width="19" xmlns="http://www.w3.org/2000/svg">
+                          <g>
                             <g>
-                              <g>
-                                <path
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"
-                                    fill="#ffc000"></path>
-                              </g>
+                              <path
+                                  d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"
+                                  fill="#ffc000"></path>
                             </g>
-                          </svg>
-                        </span>
-                        <span class="Rating-star Rating-star_view">
-                          <svg height="18" viewBox="0 0 19 18" width="19" xmlns="http://www.w3.org/2000/svg">
-                            <g>
-                              <g>
-                                <path
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"
-                                    fill="#ffc000"></path>
-                              </g>
-                            </g>
-                          </svg>
-                        </span>
-                        <span class="Rating-star Rating-star_view">
-                          <svg height="18" viewBox="0 0 19 18" width="19" xmlns="http://www.w3.org/2000/svg">
-                            <g>
-                              <g>
-                                <path
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"
-                                    fill="#ffc000"></path>
-                              </g>
-                            </g>
-                          </svg>
-                        </span>
-                        <span class="Rating-star">
-                          <svg height="18" viewBox="0 0 19 18" width="19" xmlns="http://www.w3.org/2000/svg">
-                            <g>
-                              <g>
-                                <path
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"
-                                    fill="#ffc000"></path>
-                              </g>
-                            </g>
-                          </svg>
-                        </span>
-                        <span class="Rating-star">
-                          <svg height="18" viewBox="0 0 19 18" width="19" xmlns="http://www.w3.org/2000/svg">
-                            <g>
-                              <g>
-                                <path
-                                    d="M9.5 14.925L3.629 18l1.121-6.512L0 6.875l6.564-.95L9.5 0l2.936 5.925 6.564.95-4.75 4.613L15.371 18z"
-                                    fill="#ffc000"></path>
-                              </g>
-                            </g>
-                          </svg>
-                        </span>
+                          </g>
+                        </svg>
                       </span>
                     </span>
+                  </span>
                 </div>
                 <div class="Cart-buttons">
                   <!-- <div class="Cart-btn">-->
@@ -149,7 +108,12 @@
             </div>
           </div>
           <div class="Cart-block">
-            <a class="btn btn_success btn_md" href="/order.html" th:text="#{book-page.but}">Купить</a>
+<!--            <a class="btn btn_success btn_md" href="/order.html" th:text="#{book-page.buy}">Купить</a>-->
+            <button class="btn btn_success btn_md Cart-buyAll" data-bookid="[1111, 1122, 1133]" data-sendstatus="PAID"
+                    th:attr="data-bookid=${bookCartsPage.getBookIds()}"
+                    th:text="#{book-page.buy}">
+              Купить
+            </button>
           </div>
         </div>
       </form>

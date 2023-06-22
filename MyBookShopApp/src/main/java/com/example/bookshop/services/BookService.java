@@ -37,7 +37,7 @@ public class BookService {
     }
 
     public List<BookDTO> getRecommendedBooks(int aOffset, int aLimit) {
-        return bookRepository.findAllOrderByRating(PageRequest.of(aOffset / aLimit, aLimit))
+        return bookRepository.findAllOrderByPopularity(PageRequest.of(aOffset / aLimit, aLimit))
                 .map(BookDTO::of)
                 .getContent();
     }

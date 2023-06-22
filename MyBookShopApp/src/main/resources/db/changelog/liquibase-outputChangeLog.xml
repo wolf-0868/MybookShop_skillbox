@@ -1,6 +1,6 @@
 <?xml version="1.1" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.6.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
-    <changeSet author="naemn (generated)" id="1686921020046-1">
+    <changeSet author="naemn (generated)" id="1687417187405-1">
         <createTable tableName="author">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="author_pkey"/>
@@ -16,7 +16,7 @@
             <column name="slug" type="VARCHAR(255)"/>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-2">
+    <changeSet author="naemn (generated)" id="1687417187405-2">
         <createTable tableName="balance_transaction">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="balance_transaction_pkey"/>
@@ -36,7 +36,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-3">
+    <changeSet author="naemn (generated)" id="1687417187405-3">
         <createTable tableName="book">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="book_pkey"/>
@@ -49,15 +49,14 @@
                 <constraints nullable="false"/>
             </column>
             <column name="image" type="VARCHAR(255)"/>
+            <column name="popularity" type="FLOAT8"/>
             <column name="price" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
             <column name="pub_date" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="rating" type="FLOAT8">
-                <constraints nullable="false"/>
-            </column>
+            <column name="rating" type="FLOAT8"/>
             <column name="slug" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
@@ -66,7 +65,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-4">
+    <changeSet author="naemn (generated)" id="1687417187405-4">
         <createTable tableName="book2author">
             <column name="id" type="BIGINT">
                 <constraints nullable="false"/>
@@ -82,7 +81,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-5">
+    <changeSet author="naemn (generated)" id="1687417187405-5">
         <createTable tableName="book2genre">
             <column name="id" type="BIGINT">
                 <constraints nullable="false"/>
@@ -95,7 +94,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-6">
+    <changeSet author="naemn (generated)" id="1687417187405-6">
         <createTable tableName="book2user">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="book2user_pkey"/>
@@ -114,7 +113,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-7">
+    <changeSet author="naemn (generated)" id="1687417187405-7">
         <createTable tableName="book_file">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="book_file_pkey"/>
@@ -130,7 +129,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-8">
+    <changeSet author="naemn (generated)" id="1687417187405-8">
         <createTable tableName="book_file_type">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="book_file_type_pkey"/>
@@ -141,7 +140,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-9">
+    <changeSet author="naemn (generated)" id="1687417187405-9">
         <createTable tableName="book_review">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="book_review_pkey"/>
@@ -160,7 +159,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-10">
+    <changeSet author="naemn (generated)" id="1687417187405-10">
         <createTable tableName="book_review_like">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="book_review_like_pkey"/>
@@ -179,7 +178,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-11">
+    <changeSet author="naemn (generated)" id="1687417187405-11">
         <createTable tableName="document">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="document_pkey"/>
@@ -198,7 +197,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-12">
+    <changeSet author="naemn (generated)" id="1687417187405-12">
         <createTable tableName="faq">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="faq_pkey"/>
@@ -214,7 +213,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-13">
+    <changeSet author="naemn (generated)" id="1687417187405-13">
         <createTable tableName="file_download">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="file_download_pkey"/>
@@ -230,7 +229,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-14">
+    <changeSet author="naemn (generated)" id="1687417187405-14">
         <createTable tableName="genre">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="genre_pkey"/>
@@ -244,7 +243,22 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-15">
+    <changeSet author="naemn (generated)" id="1687417187405-15">
+        <createTable tableName="journal">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="journal_pkey"/>
+            </column>
+            <column defaultValueComputed="CURRENT_TIMESTAMP" name="datetime" type="TIMESTAMP WITH TIME ZONE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="BIGINT"/>
+            <column name="user_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="naemn (generated)" id="1687417187405-16">
         <createTable tableName="message">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="message_pkey"/>
@@ -263,7 +277,23 @@
             <column name="user_id" type="BIGINT"/>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-16">
+    <changeSet author="naemn (generated)" id="1687417187405-17">
+        <createTable tableName="rating_book">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="rating_book_pkey"/>
+            </column>
+            <column name="value" type="SMALLINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="naemn (generated)" id="1687417187405-18">
         <createTable tableName="sms_keys">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="sms_keys_pkey"/>
@@ -272,7 +302,7 @@
             <column name="expire_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-17">
+    <changeSet author="naemn (generated)" id="1687417187405-19">
         <createTable tableName="user_contact">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="user_contact_pkey"/>
@@ -294,7 +324,7 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-18">
+    <changeSet author="naemn (generated)" id="1687417187405-20">
         <createTable tableName="users">
             <column autoIncrement="true" name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true" primaryKeyName="users_pkey"/>
@@ -316,76 +346,67 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-19">
-        <createTable tableName="journal">
-            <column autoIncrement="true" name="id" type="BIGINT">
-                <constraints nullable="false" primaryKey="true" primaryKeyName="journal_pkey"/>
-            </column>
-            <column defaultValueComputed="CURRENT_TIMESTAMP" name="datetime" type="TIMESTAMP WITH TIME ZONE">
-                <constraints nullable="false"/>
-            </column>
-            <column name="type" type="INTEGER">
-                <constraints nullable="false"/>
-            </column>
-            <column name="book_id" type="BIGINT"/>
-            <column name="user_id" type="BIGINT"/>
-        </createTable>
-    </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-20">
+    <changeSet author="naemn (generated)" id="1687417187405-21">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="balance_transaction" constraintName="balance_transaction_book_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-21">
+    <changeSet author="naemn (generated)" id="1687417187405-22">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="balance_transaction" constraintName="balance_transaction_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-22">
+    <changeSet author="naemn (generated)" id="1687417187405-23">
         <addForeignKeyConstraint baseColumnNames="author_id" baseTableName="book2author" constraintName="book2author_author_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="author" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-23">
+    <changeSet author="naemn (generated)" id="1687417187405-24">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book2author" constraintName="book2author_book_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-24">
+    <changeSet author="naemn (generated)" id="1687417187405-25">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book2genre" constraintName="book2genre_book_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-25">
+    <changeSet author="naemn (generated)" id="1687417187405-26">
         <addForeignKeyConstraint baseColumnNames="genre_id" baseTableName="book2genre" constraintName="book2genre_genre_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="genre" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-26">
+    <changeSet author="naemn (generated)" id="1687417187405-27">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book2user" constraintName="book2user_book_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-27">
+    <changeSet author="naemn (generated)" id="1687417187405-28">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="book2user" constraintName="book2user_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-28">
+    <changeSet author="naemn (generated)" id="1687417187405-29">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="book_review" constraintName="book_review_book_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-29">
+    <changeSet author="naemn (generated)" id="1687417187405-30">
         <addForeignKeyConstraint baseColumnNames="review_id" baseTableName="book_review_like" constraintName="book_review_like_review_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book_review" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-30">
+    <changeSet author="naemn (generated)" id="1687417187405-31">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="book_review_like" constraintName="book_review_like_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-31">
+    <changeSet author="naemn (generated)" id="1687417187405-32">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="file_download" constraintName="file_download_book_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-32">
+    <changeSet author="naemn (generated)" id="1687417187405-33">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="file_download" constraintName="file_download_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-33">
+    <changeSet author="naemn (generated)" id="1687417187405-34">
         <addForeignKeyConstraint baseColumnNames="parent_id" baseTableName="genre" constraintName="genre_parent_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="genre" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-34">
+    <changeSet author="naemn (generated)" id="1687417187405-35">
         <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="journal" constraintName="journal_book_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-35">
+    <changeSet author="naemn (generated)" id="1687417187405-36">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="journal" constraintName="journal_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-36">
+    <changeSet author="naemn (generated)" id="1687417187405-37">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="message" constraintName="message_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-37">
+    <changeSet author="naemn (generated)" id="1687417187405-38">
+        <addForeignKeyConstraint baseColumnNames="book_id" baseTableName="rating_book" constraintName="rate_book_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="book" validate="true"/>
+    </changeSet>
+    <changeSet author="naemn (generated)" id="1687417187405-39">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="rating_book" constraintName="rate_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
+    </changeSet>
+    <changeSet author="naemn (generated)" id="1687417187405-40">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="user_contact" constraintName="user_contact_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
-    <changeSet author="naemn (generated)" id="1686921020046-38">
+    <changeSet author="naemn (generated)" id="1687417187405-41">
         <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="book_review" constraintName="user_review_user_fk" deferrable="false" initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="users" validate="true"/>
     </changeSet>
 </databaseChangeLog>

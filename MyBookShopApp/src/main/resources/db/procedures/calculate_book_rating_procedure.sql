@@ -3,16 +3,17 @@ CREATE OR REPLACE FUNCTION CALCULATE_BOOK_RATING_FUNCTION(a_book_id bigint) RETU
     LANGUAGE plpgsql AS
 $$
 DECLARE
-    count_all  int;
-    count_cart int;
-    count_kept int;
+    count  int;
+    sum_value  int;
 BEGIN
-    count_all := count(*) FROM book2user WHERE book_id = a_book_id;
-    if count_all = 0 then
+    count := count(*) FROM rating_book WHERE book_id = a_book_id;
+    if count = 0 then
         RETURN 0;
     end if;
-    count_cart := count(*) FROM book2user WHERE book_id = a_book_id and type = 'CART';
-    count_kept := count(*) FROM book2user WHERE book_id = a_book_id and type = 'KEPT';
-    RETURN count_all + (0.7 * count_cart) + (0.4 * count_kept);
+    sum_value := sum(value) FROM rating_book WHERE book_id = a_book_id;
+    if sum_value = 0 then
+        RETURN 0;
+    end if;
+    RETURN sum_value / count;
 END
 $$;

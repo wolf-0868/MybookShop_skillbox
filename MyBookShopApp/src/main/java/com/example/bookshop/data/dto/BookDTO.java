@@ -17,8 +17,11 @@ import java.util.stream.Collectors;
 @JsonPropertyOrder(value = {"id", "slug", "title", "image", "authors", "discount", "isBestseller", "rating", "status", "price", "discountPrice"})
 public class BookDTO extends AbstractBookEntry {
 
-    @JsonProperty(value = "rating")
+    @JsonProperty("rating")
     private double rating;
+
+    @JsonIgnore
+    private double popularity;
 
     @JsonIgnore
     private LocalDate pubDate;
@@ -36,6 +39,7 @@ public class BookDTO extends AbstractBookEntry {
                 .pubDate(aEntity.getPubDate())
                 .bestseller(aEntity.isBestseller())
                 .rating(aEntity.getRating())
+                .popularity(aEntity.getPopularity())
                 .price(aEntity.getPrice())
                 .discount(aEntity.getDiscount())
                 .build();

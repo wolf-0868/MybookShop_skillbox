@@ -27,7 +27,6 @@ public interface Book2UserRepository extends JpaRepository<Book2UserEntity, Long
             @Param("book_id") long aBookId,
             @Param("type") BookBindingType aType);
 
-
     @Query(value = "SELECT b2u.type FROM Book2UserEntity b2u WHERE b2u.user.id = :user_id and b2u.book.id = :book_id")
     Set<BookBindingType> getAllBindingTypesByBook(
             @Param("user_id") long aUserId,

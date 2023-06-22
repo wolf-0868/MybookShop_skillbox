@@ -127,7 +127,7 @@
                 </executions>
                 <configuration>
                     <executable>true</executable>
-                    <!--                    <jvmArguments>-Dfile.encoding=UTF8</jvmArguments>-->
+                    <!-- <jvmArguments>-Dfile.encoding=UTF8</jvmArguments>-->
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
