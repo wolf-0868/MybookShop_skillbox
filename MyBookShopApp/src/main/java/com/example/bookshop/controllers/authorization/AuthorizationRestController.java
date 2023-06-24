@@ -1,4 +1,4 @@
-package com.example.bookshop.controllers;
+package com.example.bookshop.controllers.authorization;
 
 import com.example.bookshop.data.dto.drafts.DraftUserDTO;
 import com.example.bookshop.data.payloads.ContactConfirmationPayload;
@@ -8,37 +8,21 @@ import com.example.bookshop.exceptions.UserNotFountException;
 import com.example.bookshop.security.BookshopUserRegistrar;
 import com.example.bookshop.security.ConfirmationResponse;
 import com.example.bookshop.security.MessageConfirmationResponse;
-import com.example.bookshop.security.SmsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
-public class AuthUserController {
+public class AuthorizationRestController {
 
     private final BookshopUserRegistrar bookshopUserRegistrar;
-    private final SmsService smsService;
 
-    @GetMapping(value = "/signin")
-    public String signInPage() {
-        return "signin";
-    }
-
-    @GetMapping(value = "/signup")
-    public String signUpPage(Model aModel) {
-        aModel.addAttribute("draftUserDTO", new DraftUserDTO());
-        return "signup";
-    }
-
-    @ResponseBody
     @PostMapping(value = "/requestContactConfirmation")
     public ConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload aPayload) {
         ConfirmationResponse response = new ConfirmationResponse();
@@ -46,7 +30,6 @@ public class AuthUserController {
         return response;
     }
 
-    @ResponseBody
     @PostMapping(value = "/approveContact")
     public ConfirmationResponse handleApproveContact(@RequestBody ContactConfirmationPayload aPayload) {
         ConfirmationResponse response = new ConfirmationResponse();
@@ -54,7 +37,6 @@ public class AuthUserController {
         return response;
     }
 
-    @ResponseBody
     @PostMapping(value = "/login")
     public ConfirmationResponse handleLogin(@RequestBody LoginPassConfirmationPayload aPayload, HttpServletResponse aHttpServletResponse) {
         ConfirmationResponse response = bookshopUserRegistrar.jwtLogin(aPayload);

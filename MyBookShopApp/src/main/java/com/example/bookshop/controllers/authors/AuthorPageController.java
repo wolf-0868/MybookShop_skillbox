@@ -1,4 +1,4 @@
-package com.example.bookshop.controllers;
+package com.example.bookshop.controllers.authors;
 
 import com.example.bookshop.data.dto.AuthorDTO;
 import com.example.bookshop.data.dto.SlugDTO;
@@ -17,8 +17,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AuthorPageController {
 
-    private final AuthorService authorService;
     private final BookService bookService;
+    private final AuthorService authorService;
 
     @ModelAttribute
     public void addAttributes(Model aModel) {
@@ -27,7 +27,7 @@ public class AuthorPageController {
                 .collect(Collectors.groupingBy(a -> a.getFullname().substring(0, 1))));
     }
 
-    @GetMapping(value = {"", "/index"})
+    @GetMapping(value = "")
     public String indexPage() {
         return "authors/index";
     }

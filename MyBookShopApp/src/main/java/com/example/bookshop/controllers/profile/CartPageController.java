@@ -1,4 +1,4 @@
-package com.example.bookshop.controllers;
+package com.example.bookshop.controllers.profile;
 
 import com.example.bookshop.data.dto.page.BooksPageDTO;
 import com.example.bookshop.data.entities.enums.BookBindingType;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = "/cart", method = {RequestMethod.GET, RequestMethod.POST})
+@RequestMapping(value = "/cart", method = RequestMethod.GET)
 @RequiredArgsConstructor
 public class CartPageController {
 

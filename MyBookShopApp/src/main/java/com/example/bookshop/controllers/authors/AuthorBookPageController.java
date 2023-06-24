@@ -1,4 +1,4 @@
-package com.example.bookshop.controllers.books;
+package com.example.bookshop.controllers.authors;
 
 import com.example.bookshop.data.dto.AuthorDTO;
 import com.example.bookshop.data.dto.SlugDTO;

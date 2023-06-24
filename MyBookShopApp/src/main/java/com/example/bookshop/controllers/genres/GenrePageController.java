@@ -1,4 +1,4 @@
-package com.example.bookshop.controllers;
+package com.example.bookshop.controllers.genres;
 
 import com.example.bookshop.data.dto.GenreDTO;
 import com.example.bookshop.data.dto.SlugDTO;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping(value = "/genres", method = RequestMethod.GET)
 @RequiredArgsConstructor
-public class GenresPageController {
+public class GenrePageController {
 
     private final GenreService genreService;
     private final BookService bookService;

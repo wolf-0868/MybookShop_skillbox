@@ -1,4 +1,4 @@
-package com.example.bookshop.controllers.books;
+package com.example.bookshop.controllers.profile;
 
 import com.example.bookshop.data.dto.page.BooksPageDTO;
 import com.example.bookshop.exceptions.UserNotFountException;

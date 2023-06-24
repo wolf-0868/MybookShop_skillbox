@@ -1,4 +1,4 @@
-package com.example.bookshop.controllers;
+package com.example.bookshop.controllers.profile;
 
 import com.example.bookshop.data.dto.page.BooksPageDTO;
 import com.example.bookshop.data.entities.enums.BookBindingType;
