@@ -34,7 +34,7 @@ public class RecentBooksPageController {
             @RequestParam("to") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate aToDate,
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) {
-        return new BooksPageDTO(bookService.getPageOfBooks(aFromDate, aToDate, aOffset, aLimit));
+        return new BooksPageDTO(bookService.getPageBooksOfRange(aFromDate, aToDate, aOffset, aLimit));
     }
 
     @ResponseBody

@@ -35,7 +35,7 @@ public class BooksPageDTO {
                 .sum();
     }
 
-    public boolean isDiscount() {
+    public boolean isEnableDiscount() {
         return books.stream()
                 .noneMatch(b -> b.getDiscount() == 0);
     }

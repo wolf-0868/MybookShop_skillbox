@@ -2,18 +2,17 @@ package com.example.bookshop.data.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @SuperBuilder
-@Getter
-@Setter
+@Getter(AccessLevel.PUBLIC)
+@Setter(AccessLevel.PUBLIC)
+@NoArgsConstructor
 public abstract class AbstractBookEntry {
 
     @JsonProperty(value = "id")
@@ -39,7 +38,7 @@ public abstract class AbstractBookEntry {
 
     @JsonIgnore
     @Builder.Default
-    protected Set<AuthorDTO> authors = new HashSet<>();
+    protected List<AuthorDTO> authors = new ArrayList<>();
 
     @JsonProperty(value = "discountPrice")
     public int getDiscountPrice() {
@@ -54,7 +53,7 @@ public abstract class AbstractBookEntry {
     }
 
     @JsonIgnore
-    public boolean isDiscount() {
+    public boolean isEnableDiscount() {
         return discount > 0;
     }
 

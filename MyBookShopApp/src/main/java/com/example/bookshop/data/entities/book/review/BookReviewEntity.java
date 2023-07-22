@@ -30,7 +30,7 @@ public class BookReviewEntity {
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "user_review_user_fk"), nullable = false)
     private UserEntity user;
 
-    @OneToMany(mappedBy = "review", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<BookReviewLikeEntity> likes = new HashSet<>();
 
     @Column(name = "datetime", columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP", nullable = false)

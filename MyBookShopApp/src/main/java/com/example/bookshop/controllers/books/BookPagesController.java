@@ -18,7 +18,7 @@ public class BookPagesController {
     public BooksPageDTO getRecommendedBooksPage(
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) {
-        return new BooksPageDTO(bookService.getRecommendedBooks(aOffset, aLimit));
+        return new BooksPageDTO(bookService.getPageRecommendedBooks(aOffset, aLimit));
     }
 
 }

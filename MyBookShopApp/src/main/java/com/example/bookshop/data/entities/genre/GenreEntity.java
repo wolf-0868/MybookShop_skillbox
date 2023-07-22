@@ -1,6 +1,6 @@
 package com.example.bookshop.data.entities.genre;
 
-import com.example.bookshop.data.entities.BookEntity;
+import com.example.bookshop.data.entities.book.links.Book2GenreEntity;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,14 +22,10 @@ public class GenreEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "book2genre",
-            joinColumns = @JoinColumn(name = "genre_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"))
-    private Set<BookEntity> books = new HashSet<>();
+    @OneToMany(mappedBy = "genre", fetch = FetchType.LAZY)
+    private Set<Book2GenreEntity> books = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(
             name = "parent_id",
             referencedColumnName = "id",

@@ -1,5 +1,6 @@
 package com.example.bookshop.data.entities;
 
+import com.example.bookshop.data.entities.book.links.Book2AuthorEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,12 +20,8 @@ public class AuthorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "book2author",
-            joinColumns = @JoinColumn(name = "author_id"),
-            inverseJoinColumns = @JoinColumn(name = "book_id"))
-    private Set<BookEntity> books = new HashSet<>();
+    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Book2AuthorEntity> books = new HashSet<>();
 
     @Column(name = "photo")
     private String photo;

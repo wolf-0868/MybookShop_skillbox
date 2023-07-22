@@ -40,7 +40,7 @@ public class MainPageController {
 
     @ModelAttribute
     public void addAttributes(Model aModel) {
-        aModel.addAttribute("recommendedBooks", bookService.getRecommendedBooks(0, 6));
+        aModel.addAttribute("recommendedBooks", bookService.getPageRecommendedBooks(0, 6));
         aModel.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 6));
         aModel.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 6));
         aModel.addAttribute("genresMap", genreService.getAllGenres()

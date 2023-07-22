@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0" name="viewport"/>
+  <meta content="Описание страницы" name="description"/>
+  <title>Title</title>
+  <link href="/assets/css/admin_styles.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+</head>
+<body>
+<header th:insert="~{fragments\admin_fragment :: adminHeaderFragment}"></header>
+<div class="container-fluid">
+  <h2 class="text-center">[[${pageTitle}]]</h2>
+
+  <div class="my-3">
+    <form enctype="multipart/form-data" method="post" style="max-width: 550px; margin: 0 auto"
+          th:action="@{/admin/authors/save}"
+          th:object="${author}">
+
+      <input th:field="*{id}" type="hidden"/>
+
+      <div class="p-3">
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label" for="slug">Slug</label>
+          <div class="col-sm-9">
+            <input class="form-control" id="slug" maxlength="256" minlength="2" th:field="*{slug}" type="text"/>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label" for="firstName">FirstName</label>
+          <div class="col-sm-9">
+            <input class="form-control" id="firstName" maxlength="256" minlength="2" required th:field="*{firstName}"
+                   type="text"/>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label" for="firstName">LastName</label>
+          <div class="col-sm-9">
+            <input class="form-control" id="lastName" maxlength="256" minlength="2" required th:field="*{lastName}"
+                   type="text"/>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-sm-3 col-form-label" for="description">Description</label>
+          <div class="col-sm-9">
+            <textarea class="form-control" id="description" name="description" required="required" rows="5"
+                      th:field="*{description}"></textarea>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <input class="btn btn-primary btn-sm mr-2" type="submit" value="Save"/>
+          <input class="btn btn-secondary btn-sm" id="btnCancel" type="button" value="Cancel"/>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<section class="my-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 mx-auto">
+        <h2>Upload Cover for Author</h2>
+        <p class="alert alert-primary" th:if="${message ne null}" th:text="${message}"></p>
+        <form enctype="multipart/form-data" method="post"
+              th:action="@{'/admin/authors/' + ${author.getId()} + '/image/upload'}">
+          <div class="form-group">
+            <div class="form-group row">
+              <div class="col-sm-9">
+                <img alt="card.jpg" class="form-control" loading="lazy"
+                     src="/assets/img/content/main/card.jpg"
+                     th:src="${author.getImage()}"/>
+              </div>
+            </div>
+            <input accept="image/*" class="form-control-file" name="image" type="file">
+          </div>
+          <button class="btn btn-primary" type="submit">Upload image</button>
+        </form>
+        <span th:if="${msg != null}" th:text="${msg}"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnCancel").on("click", function () {
+            window.location = "[[@{/admin/authors}]]";
+        });
+    });
+</script>
+
+</body>
+</html>

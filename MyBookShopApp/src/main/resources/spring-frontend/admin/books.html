@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ru"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0" name="viewport"/>
+  <meta content="Описание страницы" name="description"/>
+  <title>Title</title>
+  <link href="/assets/css/admin_styles.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" type="text/css"/>
+  <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        referrerpolicy="no-referrer" rel="stylesheet"/>
+</head>
+<body>
+<header th:insert="~{fragments\admin_fragment :: adminHeaderFragment}"></header>
+<div class="container-fluid" style="max-width: 900px; margin: 0 auto;">
+  <h2 class="text-center">Books</h2>
+
+  <div class="alert alert-success alert-dismissible fade show text-center message" role="alert"
+       th:if="${message != null}">
+    [[${message}]]
+    <button aria-label="Close" class="close btn-sm" data-dismiss="alert" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="my-3">
+    <form id="searchForm" th:action="@{/admin/books}">
+      <div class="row d-flex">
+
+        <div class="col-md-6 mt-2">
+          <div class="search">
+            <i class="fa fa-search"></i>
+            <input class="form-control" id="keyword" name="keyword" placeholder="Enter keyword" required
+                   th:value="${keyword}"
+                   type="search">
+            <button class="btn btn-secondary" type="submit">Search</button>
+          </div>
+        </div>
+        <div class="col-md-1 mt-2">
+          <button class="btn btn-info" id="btnClear">Clear</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div th:if="${books.size() > 0}">
+    <table class="table table-hover table-responsive-xl">
+      <thead class="thead-light">
+      <tr>
+        <th>id</th>
+        <th>slug</th>
+        <th>title</th>
+        <th>image</th>
+        <th>authors</th>
+        <th>isBestseller</th>
+        <th>rating</th>
+        <th>price</th>
+        <th>discount</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="book : ${books}">
+        <td th:text="${book.getId()}">id</td>
+        <td th:text="${book.getSlug()}">slug</td>
+        <td th:text="${book.getTitle()}">title</td>
+        <td>
+          <img alt="card.jpg" height="120" loading="lazy" src="/assets/img/content/main/card.jpg"
+               th:src="${book.getImage()}"/>
+        </td>
+        <td th:text="${book.getAuthorFullName()}">author</td>
+        <td th:text="${book.isBestseller()}">isBestseller</td>
+        <td th:text="${book.getRating()}">rating</td>
+        <td th:text="${book.getPrice()}">price</td>
+        <td th:text="${book.getDiscount()}">discount</td>
+        <td>
+          <a class="fa-regular fa-pen-to-square icon-dark" th:href="@{'/admin/books/edit/' + ${book.getId()}}"
+             title="Edit this Book"></a>
+          &nbsp;
+          <a class="fa-regular fa-trash-can icon-dark btn-delete" data-bs-target="#staticBackdrop"
+             data-bs-toggle="modal"
+             id="btnDelete" th:bookTitle="${book.getTitle}"
+             th:href="@{'/admin/books/delete/' + ${book.getId()}}" title="Delete this book"></a>
+        </td>
+
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div th:unless="${books.size() > 0}">
+    <span>No Books found!</span>
+  </div>
+
+  <nav aria-label="Pagination" th:if="${totalPages > 0}">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${currentPage == 1} ? 'disabled'">
+        <a th:replace="~{fragments/admin_fragment :: paging('books', 1, '<<', 'First Page')}"></a>
+      </li>
+      <li class="page-item font-weight-bold" th:classappend="${currentPage == 1} ? 'disabled'">
+        <a th:replace="~{fragments/admin_fragment :: paging('books', ${currentPage - 1}, 'Prev', 'Previous Page')}"></a>
+      </li>
+      <li class="page-item disabled" th:if="${currentPage - 2 > 1}">
+        <a class="page-link" href="#">...</a>
+      </li>
+      <li class="page-item" th:classappend="${page == currentPage} ? 'active'"
+          th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
+        <a th:replace="~{fragments/admin_fragment :: paging('books', ${page}, ${page}, 'Page ' + ${page})}"></a>
+      </li>
+      <li class="page-item disabled" th:if="${currentPage + 2 < totalPages}">
+        <a class="page-link" href="#">...</a>
+      </li>
+      <li class="page-item font-weight-bold" th:classappend="${currentPage == totalPages} ? 'disabled'">
+        <a th:replace="~{fragments/admin_fragment :: paging('books', ${currentPage + 1},'Next', 'Next Page')}"></a>
+      </li>
+      <li class="page-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
+        <a th:replace="~{fragments/admin_fragment :: paging('books', ${totalPages}, '>>', 'Last Page')}"></a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div aria-hidden="true" aria-labelledby="staticBackdropLabel" class="modal fade" data-bs-backdrop="static"
+     data-bs-keyboard="false" id="staticBackdrop" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Delete Confirmation</h5>
+        <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+      </div>
+
+      <div class="modal-body">
+        <span id="confirmText"></span>
+      </div>
+
+      <div class="modal-footer">
+        <a class="btn btn-danger" id="yesBtn" type="button">Yes</a>
+        <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.btn-delete').on("click", function (e) {
+            e.preventDefault();
+            const link = $(this);
+
+            const bookTitle = link.attr("bookTitle");
+            $("#yesBtn").attr("href", link.attr("href"));
+            $("#confirmText").html("Do you want to delete the Book \<strong\>" + bookTitle + "\<\/strong\>?");
+            $("#confirmModal").modal();
+        });
+
+        $("#btnClear").on("click", function (e) {
+            e.preventDefault();
+            $("#keyword").text("");
+            window.location = "[[@{/admin/books}]]";
+        });
+    });
+</script>
+</body>
+</html>

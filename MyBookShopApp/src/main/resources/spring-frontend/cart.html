@@ -82,13 +82,13 @@
                   </div>
                 </div>
               </div>
-              <div class="Cart-block Cart-block_price" th:if="${book.isDiscount()}">
+              <div class="Cart-block Cart-block_price" th:if="${book.isEnableDiscount()}">
                 <div class="Cart-priceTitle" th:text="#{book-page.price} + ':'">Цена:</div>
                 <div class="Cart-price Cart-price_old" th:text="${book.getPrice()} + ' р.'">150 р.</div>
                 <div class="Cart-price" th:text="${book.getDiscountPrice()} + ' р.'">100 р.</div>
                 <div class="Cart-sale" th:text="${book.getDiscount()} + '%'">-30%</div>
               </div>
-              <div class="Cart-block Cart-block_price" th:if="!${book.isDiscount()}">
+              <div class="Cart-block Cart-block_price" th:if="!${book.isEnableDiscount()}">
                 <div class="Cart-priceTitle" th:text="#{book-page.price} + ':'">Цена:</div>
                 <div class="Cart-price" th:text="${book.getPrice()} + ' р.'">254 р.</div>
               </div>
@@ -99,11 +99,11 @@
         <div class="Cart-total">
           <div class="Cart-block Cart-block_total">
             <strong class="Cart-title" th:text="#{book-page.total} + ':'">Итого:</strong>
-            <div th:if="${bookCartsPage.isDiscount()}">
+            <div th:if="${bookCartsPage.isEnableDiscount()}">
               <span class="Cart-price" th:text="${bookCartsPage.getSumDiscountPrice()} + ' р.'">534 р.</span>
               <span class="Cart-price_old" th:text="${bookCartsPage.getSumPrice()} + ' р.'">658 р.</span>
             </div>
-            <div th:if="!${bookCartsPage.isDiscount()}">
+            <div th:if="!${bookCartsPage.isEnableDiscount()}">
               <span class="Cart-price" th:text="${bookCartsPage.getSumPrice()} + ' р.'">534 р.</span>
             </div>
           </div>

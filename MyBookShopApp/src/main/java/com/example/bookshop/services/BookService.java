@@ -5,7 +5,9 @@ import com.example.bookshop.data.entities.BookEntity;
 import com.example.bookshop.exceptions.DataNotFoundException;
 import com.example.bookshop.repositories.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,13 +32,13 @@ public class BookService {
                 .orElseThrow(() -> new DataNotFoundException(Map.of("slug", aSlug), BookEntity.class.getName()));
     }
 
-    public List<BookDTO> getPageOfBooks(LocalDate aStartDate, LocalDate aEndDate, int aOffset, int aLimit) {
+    public List<BookDTO> getPageBooksOfRange(LocalDate aStartDate, LocalDate aEndDate, int aOffset, int aLimit) {
         return bookRepository.findByPubDateAfterAndPubDateBefore(aStartDate, aEndDate, PageRequest.of(aOffset / aLimit, aLimit))
                 .map(BookDTO::of)
                 .getContent();
     }
 
-    public List<BookDTO> getRecommendedBooks(int aOffset, int aLimit) {
+    public List<BookDTO> getPageRecommendedBooks(int aOffset, int aLimit) {
         return bookRepository.findAllOrderByPopularity(PageRequest.of(aOffset / aLimit, aLimit))
                 .map(BookDTO::of)
                 .getContent();
@@ -55,10 +57,13 @@ public class BookService {
                 .getContent();
     }
 
-    public List<BookDTO> getPageOfSearchResultBooks(String aSearchWord, int aOffset, int aLimit) {
-        return bookRepository.findByTitleContainingIgnoreCase(aSearchWord, PageRequest.of(aOffset / aLimit, aLimit))
-                .map(BookDTO::of)
-                .getContent();
+    public Page<BookDTO> getPageOfSearchResultBooks(String aSearchWord, int aOffset, int aLimit) {
+        return getPageOfSearchResultBooks(aSearchWord, PageRequest.of(aOffset / aLimit, aLimit));
+    }
+
+    public Page<BookDTO> getPageOfSearchResultBooks(String aSearchWord, Pageable aPageable) {
+        return bookRepository.findByTitleContainingIgnoreCase(aSearchWord, aPageable)
+                .map(BookDTO::of);
     }
 
     public List<BookDTO> getPageByGenreId(long aGenreId, int aOffset, int aLimit) {
@@ -71,6 +76,12 @@ public class BookService {
         return bookRepository.findByAuthorId(aAuthorId, PageRequest.of(aOffset / aLimit, aLimit))
                 .map(BookDTO::of)
                 .getContent();
+    }
+
+    public void saveBook(BookDTO aBook) {
+        BookEntity bookEntity = new BookEntity();
+
+        bookRepository.save(bookEntity);
     }
 
 }

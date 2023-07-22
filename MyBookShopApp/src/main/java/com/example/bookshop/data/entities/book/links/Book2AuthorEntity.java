@@ -20,10 +20,12 @@ public class Book2AuthorEntity {
     private Long id;
 
     @ManyToOne
+    @MapsId(value = "book_id")
     @JoinColumn(name = "book_id", foreignKey = @ForeignKey(name = "book2author_book_fk"), nullable = false)
     private BookEntity book;
 
     @ManyToOne
+    @MapsId(value = "author_id")
     @JoinColumn(name = "author_id", foreignKey = @ForeignKey(name = "book2author_author_fk"), nullable = false)
     private AuthorEntity author;
 

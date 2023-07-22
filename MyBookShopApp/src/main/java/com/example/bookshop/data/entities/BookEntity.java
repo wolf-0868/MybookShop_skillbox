@@ -1,7 +1,8 @@
 package com.example.bookshop.data.entities;
 
+import com.example.bookshop.data.entities.book.links.Book2AuthorEntity;
+import com.example.bookshop.data.entities.book.links.Book2GenreEntity;
 import com.example.bookshop.data.entities.book.links.Book2UserEntity;
-import com.example.bookshop.data.entities.genre.GenreEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -22,21 +23,13 @@ public class BookEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "book2author",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "author_id"))
-    private Set<AuthorEntity> authors = new HashSet<>();
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Book2AuthorEntity> authors = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "book2genre",
-            joinColumns = @JoinColumn(name = "book_id"),
-            inverseJoinColumns = @JoinColumn(name = "genre_id"))
-    private Set<GenreEntity> genres = new HashSet<>();
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Book2GenreEntity> genres = new HashSet<>();
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Book2UserEntity> bindingUsers = new HashSet<>();
 
     @Column(name = "pub_date", columnDefinition = "DATE", nullable = false)

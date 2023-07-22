@@ -30,7 +30,7 @@ public class SearchPageController {
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit,
             @PathVariable(value = "searchWord") SearchWordDTO aSearchWord) {
-        return new BooksPageDTO(bookService.getPageOfSearchResultBooks(aSearchWord.getExample(), aOffset, aLimit));
+        return new BooksPageDTO(bookService.getPageOfSearchResultBooks(aSearchWord.getExample(), aOffset, aLimit).getContent());
     }
 
 }
