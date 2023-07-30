@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource("/application-test.properties")
-public class AuthorPageControllerTestCase {
+class AuthorPageControllerTestCase {
 
     private final MockMvc mockMvc;
 

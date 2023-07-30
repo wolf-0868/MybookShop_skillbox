@@ -12,8 +12,7 @@ import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestPropertySource("/application-test.properties")
@@ -58,7 +57,7 @@ class BookRepositoryTestCase {
 
     @Test
     void testCalculatePopularityForBook() {
-        assertNotNull(bookRepository.calculatePopularityForBook(1L));
+        assertNotEquals(0, bookRepository.calculatePopularityForBook(1L));
     }
 
 }

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @ToString
 @NoArgsConstructor
 @JsonPropertyOrder(value = {"id", "slug", "title", "image", "authors", "discount", "isBestseller", "rating", "status", "price", "discountPrice"})
-public class BookDTO extends AbstractBookEntry {
+public class BookDTO extends AbstractBookEntryDTO {
 
     @JsonProperty("rating")
     private double rating;

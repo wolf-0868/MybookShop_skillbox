@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Table(name = "book2user")
@@ -15,7 +16,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Book2UserEntity {
+public class Book2UserEntity implements Serializable {
+
+    private static final long serialVersionUID = -105028737820610408L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

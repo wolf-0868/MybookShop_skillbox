@@ -56,10 +56,11 @@ public class SlugBookPageController {
     @ResponseBody
     @PostMapping(value = "/changeBookStatus")
     public ConfirmationResponse handleChangeBookStatus(@RequestBody ChangeBookStatusPayload aPayload) throws BookshopException {
-        ConfirmationResponse response = new ConfirmationResponse();
+        ConfirmationResponse response = new ConfirmationResponse(false);
         if (aPayload.getBooksIds().isEmpty() || (aPayload.getStatus() == null)) {
-            response.setResult("false");
-        } else if (aPayload.getBooksIds().size() == 1) {
+            return response;
+        }
+        if (aPayload.getBooksIds().size() == 1) {
             book2UserService.changeBookBindingType(aPayload.getBooksIds()
                     .iterator()
                     .next(), bookshopUserRegistrar.getCurrentIdUser(), aPayload.getStatus());
@@ -75,7 +76,7 @@ public class SlugBookPageController {
                     throw new UserNotFountException("Групповое изменение статуса '%s' не реализована", aPayload.getStatus());
             }
         }
-        response.setResult("true");
+        response.setResult(true);
         return response;
     }
 
@@ -98,20 +99,18 @@ public class SlugBookPageController {
     @ResponseBody
     @PostMapping(value = "/rateBook")
     public ConfirmationResponse handleRateBook(@RequestBody RateBookPayload aPayload) throws UserNotFountException {
-        ConfirmationResponse response = new ConfirmationResponse();
-        response.setResult("false");
+        ConfirmationResponse response = new ConfirmationResponse(false);
         ratingBookService.updateRatingBook(aPayload.getBookId(), bookshopUserRegistrar.getCurrentIdUser(), aPayload.getValue());
-        response.setResult("true");
+        response.setResult(true);
         return response;
     }
 
     @ResponseBody
     @PostMapping(value = "/rateBookReview")
     public ConfirmationResponse handleRateBookReview(@RequestBody RateBookReviewPayload aPayload) throws UserNotFountException {
-        ConfirmationResponse response = new ConfirmationResponse();
-        response.setResult("false");
+        ConfirmationResponse response = new ConfirmationResponse(false);
         ratingBookService.updateRatingBookReview(aPayload.getReviewId(), bookshopUserRegistrar.getCurrentIdUser(), aPayload.getValue());
-        response.setResult("true");
+        response.setResult(true);
         return response;
     }
 

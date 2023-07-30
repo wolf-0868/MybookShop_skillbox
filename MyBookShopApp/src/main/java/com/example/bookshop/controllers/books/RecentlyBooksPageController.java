@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(value = "/books/recently", method = {RequestMethod.GET, RequestMethod.POST})
 @RequiredArgsConstructor
 public class RecentlyBooksPageController {
 
@@ -22,13 +21,13 @@ public class RecentlyBooksPageController {
         aModel.addAttribute("recentlyBooks", journalService.getPageOfRecentlyBooks(userRegistrar.getCurrentIdUser(), 0, 20));
     }
 
-    @GetMapping
+    @GetMapping(value = "/books/recently")
     public String popularPage() {
         return "books/recently";
     }
 
     @ResponseBody
-    @PostMapping(params = {"offset", "limit"})
+    @PostMapping(value = "/books/recently", params = {"offset", "limit"})
     public BooksPageDTO getRecentlyBooksPage(
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) throws UserNotFountException {

@@ -7,13 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "book2genre")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Book2GenreEntity {
+public class Book2GenreEntity implements Serializable {
+
+    private static final long serialVersionUID = -4618336087840100157L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

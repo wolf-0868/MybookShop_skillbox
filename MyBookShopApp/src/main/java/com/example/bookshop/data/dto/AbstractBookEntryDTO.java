@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Getter(AccessLevel.PUBLIC)
 @Setter(AccessLevel.PUBLIC)
 @NoArgsConstructor
-public abstract class AbstractBookEntry {
+public abstract class AbstractBookEntryDTO {
 
     @JsonProperty(value = "id")
     protected Long id;

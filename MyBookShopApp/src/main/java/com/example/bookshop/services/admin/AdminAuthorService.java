@@ -17,6 +17,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AdminAuthorService {
 
+    static final String AUTHOR_NOT_FOUNT_FORMAT = "Author by id='%d' not found";
+
     private final AuthorRepository authorRepository;
     private final ResourceStorageService storageService;
 
@@ -37,18 +39,18 @@ public class AdminAuthorService {
     public DraftAuthorDTO findAuthorById(Long aId) throws BookshopException {
         return authorRepository.findById(aId)
                 .map(DraftAuthorDTO::of)
-                .orElseThrow(() -> new BookshopException("Author by id='%d' not found", aId));
+                .orElseThrow(() -> new BookshopException(AUTHOR_NOT_FOUNT_FORMAT, aId));
     }
 
     public void deleteAuthorById(Long aId) throws BookshopException {
         AuthorEntity authorEntity = authorRepository.findById(aId)
-                .orElseThrow(() -> new BookshopException("Author by id='%d' not found", aId));
+                .orElseThrow(() -> new BookshopException(AUTHOR_NOT_FOUNT_FORMAT, aId));
         authorRepository.delete(authorEntity);
     }
 
     public void changeImageForAuthor(MultipartFile aFile, long aAuthorId) throws BookshopException, IOException {
         AuthorEntity authorEntity = authorRepository.findById(aAuthorId)
-                .orElseThrow(() -> new BookshopException("Author by id='%d' not found", aAuthorId));
+                .orElseThrow(() -> new BookshopException(AUTHOR_NOT_FOUNT_FORMAT, aAuthorId));
         String savePath = storageService.saveNewBookImage(aFile, authorEntity.getSlug());
         authorEntity.setPhoto(savePath);
         authorRepository.save(authorEntity);
@@ -60,7 +62,7 @@ public class AdminAuthorService {
             authorEntity = new AuthorEntity();
         } else {
             authorEntity = authorRepository.findById(aPayload.getId())
-                    .orElseThrow(() -> new BookshopException("Author by id='%d' not found", aPayload.getId()));
+                    .orElseThrow(() -> new BookshopException(AUTHOR_NOT_FOUNT_FORMAT, aPayload.getId()));
         }
         authorEntity.setId(aPayload.getId());
         authorEntity.setSlug(aPayload.getSlug());

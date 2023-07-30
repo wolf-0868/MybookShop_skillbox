@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Table(name = "journal")
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class JournalEntity {
+public class JournalEntity implements Serializable {
+
+    private static final long serialVersionUID = -6333925911819020733L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

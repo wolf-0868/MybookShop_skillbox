@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +17,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BookReviewEntity {
+public class BookReviewEntity implements Serializable {
+
+    private static final long serialVersionUID = -7278612065105131572L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -6,13 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "rating_book")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class RatingBookEntity {
+public class RatingBookEntity implements Serializable {
+
+    private static final long serialVersionUID = 261119109192565101L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

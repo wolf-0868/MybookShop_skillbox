@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Table(name = "users")
@@ -12,7 +13,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserEntity {
+public class UserEntity implements Serializable {
+
+    private static final long serialVersionUID = -5449901440425565213L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

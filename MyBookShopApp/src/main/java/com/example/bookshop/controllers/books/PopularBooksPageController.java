@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping(value = "/books/popular", method = {RequestMethod.GET, RequestMethod.POST})
 @RequiredArgsConstructor
 public class PopularBooksPageController {
 
@@ -19,13 +18,13 @@ public class PopularBooksPageController {
         aModel.addAttribute("popularBooks", bookService.getPageOfPopularBooks(0, 20));
     }
 
-    @GetMapping
+    @GetMapping(value = "/books/popular")
     public String popularPage() {
         return "books/popular";
     }
 
     @ResponseBody
-    @PostMapping(params = {"offset", "limit"})
+    @PostMapping(value = "/books/popular", params = {"offset", "limit"})
     public BooksPageDTO getPopularBooksPage(
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) {

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +18,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BookEntity {
+public class BookEntity implements Serializable {
+
+    private static final long serialVersionUID = 260150012206476046L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

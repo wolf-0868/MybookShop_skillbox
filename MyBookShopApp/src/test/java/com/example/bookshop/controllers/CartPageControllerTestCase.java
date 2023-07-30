@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,7 +48,7 @@ class CartPageControllerTestCase {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
 
-        assertTrue(result != book2UserRepository.existsBookByBindingType(1L, 1L, BookBindingType.CART));
+        assertNotEquals(result, book2UserRepository.existsBookByBindingType(1L, 1L, BookBindingType.CART));
     }
 
 }

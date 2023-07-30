@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AdminBookService {
 
+    static final String BOOK_NOT_FOUNT_FORMAT = "Book by id='%d' not found";
+
     private final BookRepository bookRepository;
     private final BookReviewRepository bookReviewRepository;
     private final AuthorRepository authorRepository;
@@ -54,19 +56,19 @@ public class AdminBookService {
     public DraftBookDTO findBookById(Long aId) throws BookshopException {
         return bookRepository.findById(aId)
                 .map(DraftBookDTO::of)
-                .orElseThrow(() -> new BookshopException("Book by id='%d' not found", aId));
+                .orElseThrow(() -> new BookshopException(BOOK_NOT_FOUNT_FORMAT, aId));
     }
 
     public void deleteBookById(Long aId) throws BookshopException {
         BookEntity bookEntity = bookRepository.findById(aId)
-                .orElseThrow(() -> new BookshopException("Book by id='%d' not found", aId));
+                .orElseThrow(() -> new BookshopException(BOOK_NOT_FOUNT_FORMAT, aId));
         bookReviewRepository.deleteAllByBook(bookEntity);
         bookRepository.delete(bookEntity);
     }
 
     public void changeImageForBook(MultipartFile aFile, long aBookId) throws BookshopException, IOException {
         BookEntity bookEntity = bookRepository.findById(aBookId)
-                .orElseThrow(() -> new BookshopException("Book by id='%d' not found", aBookId));
+                .orElseThrow(() -> new BookshopException(BOOK_NOT_FOUNT_FORMAT, aBookId));
         String savePath = storageService.saveNewBookImage(aFile, bookEntity.getSlug());
         bookEntity.setImage(savePath);
         bookRepository.save(bookEntity);
@@ -78,7 +80,7 @@ public class AdminBookService {
             bookEntity = new BookEntity();
         } else {
             bookEntity = bookRepository.findById(aPayload.getId())
-                    .orElseThrow(() -> new BookshopException("Book by id='%d' not found", aPayload.getId()));
+                    .orElseThrow(() -> new BookshopException(BOOK_NOT_FOUNT_FORMAT, aPayload.getId()));
         }
         bookEntity.setId(aPayload.getId());
         bookEntity.setSlug(aPayload.getSlug());
@@ -91,7 +93,7 @@ public class AdminBookService {
 
         if (aPayload.getAuthorId() != null) {
             AuthorEntity authorEntity = authorRepository.findById(aPayload.getAuthorId())
-                    .orElseThrow(() -> new BookshopException("Author by id='%d' not found", aPayload.getAuthorId()));
+                    .orElseThrow(() -> new BookshopException(AdminAuthorService.AUTHOR_NOT_FOUNT_FORMAT, aPayload.getAuthorId()));
             Book2AuthorEntity book2AuthorEntity = new Book2AuthorEntity();
             book2AuthorEntity.setBook(bookEntity);
             book2AuthorEntity.setAuthor(authorEntity);

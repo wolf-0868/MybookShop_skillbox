@@ -78,10 +78,4 @@ public class BookService {
                 .getContent();
     }
 
-    public void saveBook(BookDTO aBook) {
-        BookEntity bookEntity = new BookEntity();
-
-        bookRepository.save(bookEntity);
-    }
-
 }

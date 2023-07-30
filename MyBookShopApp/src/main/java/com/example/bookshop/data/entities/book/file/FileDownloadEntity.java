@@ -7,13 +7,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Table(name = "file_download")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class FileDownloadEntity {
+public class FileDownloadEntity implements Serializable {
+
+    private static final long serialVersionUID = -8675202223705549708L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -11,7 +11,7 @@ import java.util.Set;
 @Component
 public class JWTBlacklist {
 
-    private static JWTBlacklist INSTANCE;
+    private static JWTBlacklist instance;
     private final Set<String> blacklist = new HashSet<>();
 
     @Setter(onMethod_ = {@Autowired})
@@ -20,10 +20,10 @@ public class JWTBlacklist {
     private JWTBlacklist() {}
 
     public static JWTBlacklist getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new JWTBlacklist();
+        if (instance == null) {
+            instance = new JWTBlacklist();
         }
-        return INSTANCE;
+        return instance;
     }
 
     public void addToken(String aToken) {
@@ -34,7 +34,7 @@ public class JWTBlacklist {
         return blacklist.contains(aToken);
     }
 
-    @Scheduled(fixedRate = 1000 * 60 * 60 * 1)
+    @Scheduled(fixedRate = 3600000)
     public void checkingValidityTokensInBlacklist() {
         blacklist.removeIf(jwtUtil::isTokenExpired);
     }

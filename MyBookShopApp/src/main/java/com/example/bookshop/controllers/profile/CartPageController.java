@@ -9,18 +9,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
-@RequestMapping(value = "/cart", method = RequestMethod.GET)
 @RequiredArgsConstructor
 public class CartPageController {
 
     private final Book2UserService book2UserService;
     private final BookshopUserRegistrar bookshopUserRegistrar;
 
-    @GetMapping
+    @GetMapping(value = "/cart")
     public String cartPage(Model aModel) throws UserNotFountException {
         aModel.addAttribute("bookCartsPage", new BooksPageDTO(book2UserService.findBooksByBindingTypeForUser(bookshopUserRegistrar.getCurrentIdUser(), BookBindingType.CART)));
         return "cart";

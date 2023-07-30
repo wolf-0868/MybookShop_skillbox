@@ -12,6 +12,8 @@ import java.util.Collection;
 @AllArgsConstructor
 public class BookshopUserDetails implements UserDetails {
 
+    private static final long serialVersionUID = 2096551706883575637L;
+
     private final UserEntity user;
 
     public UserEntity getUser() {

@@ -4,6 +4,8 @@ import java.util.Map;
 
 public class DataNotFoundException extends BookshopException {
 
+    private static final long serialVersionUID = -146070290329641472L;
+
     public DataNotFoundException(String aMessage) {
         super(aMessage);
     }
@@ -16,9 +18,9 @@ public class DataNotFoundException extends BookshopException {
         super(String.format("Не удалось найти данные класса %s по следующим параметрам: %s", aDataClass, convertWithIteration(aMaps)));
     }
 
-    static private String convertWithIteration(Map<String, ?> aMaps) {
+     private static String convertWithIteration(Map<String, ?> aMaps) {
         StringBuilder mapAsString = new StringBuilder("{");
-        for (Map.Entry entry : aMaps.entrySet()) {
+        for (Map.Entry<String, ?> entry : aMaps.entrySet()) {
             mapAsString.append(entry.getKey() + "=" + entry.getValue() + ", ");
         }
         mapAsString.delete(mapAsString.length() - 2, mapAsString.length()).append("}");

@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @Controller
-@RequestMapping(value = "/books/recent", method = {RequestMethod.GET, RequestMethod.POST})
 @RequiredArgsConstructor
 public class RecentBooksPageController {
 
@@ -22,13 +21,13 @@ public class RecentBooksPageController {
         aModel.addAttribute("recentBooks", bookService.getPageOfRecentBooks(0, 20));
     }
 
-    @GetMapping
+    @GetMapping(value = "/books/recent")
     public String recentPage(Model aModel) {
         return "books/recent";
     }
 
     @ResponseBody
-    @PostMapping(params = {"from", "to", "offset", "limit"})
+    @PostMapping(value = "/books/recent", params = {"from", "to", "offset", "limit"})
     public BooksPageDTO getRecentBooksPage(
             @RequestParam("from") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate aFromDate,
             @RequestParam("to") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate aToDate,
@@ -38,7 +37,7 @@ public class RecentBooksPageController {
     }
 
     @ResponseBody
-    @PostMapping(params = {"offset", "limit"})
+    @PostMapping(value = "/books/recent", params = {"offset", "limit"})
     public BooksPageDTO getRecentBooksPage(
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) {

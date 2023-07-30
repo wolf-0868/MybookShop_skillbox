@@ -3,6 +3,7 @@ package com.example.bookshop.security.jwt;
 import com.example.bookshop.security.BookshopUserDetailsService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -23,36 +24,41 @@ public class JWTRequestFilter extends OncePerRequestFilter {
     private final JWTUtil jwtUtil;
     private final BookshopUserDetailsService bookshopUserDetailsService;
 
+
+    private static UsernamePasswordAuthenticationToken getAuthenticationToken(UserDetails aUserDetails, HttpServletRequest aRequest) {
+        UsernamePasswordAuthenticationToken authenticationToken = createAuthenticationToken(aUserDetails);
+        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(aRequest));
+        return authenticationToken;
+    }
+
+    private static UsernamePasswordAuthenticationToken createAuthenticationToken(UserDetails aUserDetails) {
+        return new UsernamePasswordAuthenticationToken(aUserDetails, null, aUserDetails.getAuthorities());
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest aRequest, HttpServletResponse aResponse, FilterChain aFilterChain) throws ServletException, IOException {
-        String token = null;
-        String username = null;
         Cookie[] cookies = aRequest.getCookies();
-
         if (cookies != null) {
+            String username = null;
             for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    token = cookie.getValue();
-                    if (JWTBlacklist.getInstance().checkContainsToken(token)) {
-                        break;
-                    }
+                String token = cookie.getValue();
+                if (cookie.getName().equals("token") && !JWTBlacklist.getInstance().checkContainsToken(token)) {
                     username = jwtUtil.extractUsername(token);
                 }
-
-                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = bookshopUserDetailsService.loadUserByUsername(username);
-                    if (jwtUtil.validateToken(token, userDetails)) {
-                        UsernamePasswordAuthenticationToken authenticationToken =
-                                new UsernamePasswordAuthenticationToken(
-                                        userDetails, null, userDetails.getAuthorities());
-
-                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(aRequest));
-                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    }
-                }
+                updateAuthentication(username, token, aRequest);
             }
         }
         aFilterChain.doFilter(aRequest, aResponse);
+    }
+
+    private void updateAuthentication(String aUsername, String aToken, HttpServletRequest aRequest) {
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        if ((aUsername != null) && (securityContext.getAuthentication() == null)) {
+            UserDetails userDetails = bookshopUserDetailsService.loadUserByUsername(aUsername);
+            if (jwtUtil.validateToken(aToken, userDetails)) {
+                securityContext.setAuthentication(getAuthenticationToken(userDetails, aRequest));
+            }
+        }
     }
 
 }

@@ -25,22 +25,20 @@ public class AuthorizationRestController {
 
     @PostMapping(value = "/requestContactConfirmation")
     public ConfirmationResponse handleRequestContactConfirmation(@RequestBody ContactConfirmationPayload aPayload) {
-        ConfirmationResponse response = new ConfirmationResponse();
-        response.setResult("true");
-        return response;
+        return new ConfirmationResponse(true);
     }
 
     @PostMapping(value = "/approveContact")
     public ConfirmationResponse handleApproveContact(@RequestBody ContactConfirmationPayload aPayload) {
-        ConfirmationResponse response = new ConfirmationResponse();
-        response.setResult("true");
-        return response;
+        return new ConfirmationResponse(true);
     }
 
     @PostMapping(value = "/login")
     public ConfirmationResponse handleLogin(@RequestBody LoginPassConfirmationPayload aPayload, HttpServletResponse aHttpServletResponse) {
         ConfirmationResponse response = bookshopUserRegistrar.jwtLogin(aPayload);
         Cookie cookie = new Cookie("token", response.getResult());
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
         aHttpServletResponse.addCookie(cookie);
         return response;
     }
@@ -54,8 +52,7 @@ public class AuthorizationRestController {
 
     @PostMapping(value = "/updateUser")
     public String handleUpdateCurrentUser(DraftUserDTO aDraftUserDTO, Model aModel) throws UserNotFountException {
-        MessageConfirmationResponse response = new MessageConfirmationResponse();
-        response.setResult("false");
+        MessageConfirmationResponse response = new MessageConfirmationResponse(false);
         if (aDraftUserDTO.getPassword() == null) {
             response.setMessage("Empty password");
         } else if (!aDraftUserDTO.getPassword().equals(aDraftUserDTO.getPasswordReply())) {
@@ -63,9 +60,9 @@ public class AuthorizationRestController {
         } else {
             try {
                 bookshopUserRegistrar.updateCurrentUser(aDraftUserDTO);
-                response.setResult("true");
+                response.setResult(true);
             } catch (BookshopUserRegistrarException e) {
-                response.setResult("false");
+                response.setResult(false);
                 response.setMessage(e.getMessage());
             }
         }

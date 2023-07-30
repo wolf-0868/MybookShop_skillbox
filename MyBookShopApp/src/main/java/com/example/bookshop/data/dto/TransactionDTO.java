@@ -21,7 +21,7 @@ import java.time.format.DateTimeFormatter;
 public class TransactionDTO {
 
     @JsonIgnore
-    private final static String DATE_TIME_FORMAT = "d MMMM yyyy HH:mm";
+    private static final String DATE_TIME_FORMAT = "d MMMM yyyy HH:mm";
 
     @JsonIgnore
     private long id;

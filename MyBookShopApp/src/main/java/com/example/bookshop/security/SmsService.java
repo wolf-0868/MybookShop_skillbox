@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -18,21 +18,21 @@ public class SmsService {
     private final SmsCodeRepository smsCodeRepository;
 
     @Value("${twilio.ACCOUNT_SID}")
-    private String ACCOUNT_SID;
+    private String accountSID;
 
     @Value("${twilio.AUTH_TOKEN}")
-    private String AUTH_TOKEN;
+    private String authToken;
 
     @Value("${twilio.TWILIO_NUMBER}")
-    private String TWILIO_NUMBER;
+    private String tilioNumber;
 
     public String sendSecretCodeSms(String aContact) {
-        Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
+        Twilio.init(accountSID, authToken);
         String formatted = aContact.replaceAll("[()-]", "");
         String generatedCode = generateCode();
         Message.creator(
                         new PhoneNumber(formatted),
-                        new PhoneNumber(TWILIO_NUMBER),
+                        new PhoneNumber(tilioNumber),
                         "Your secret code it: " + generatedCode
                 )
                 .create();
@@ -41,10 +41,9 @@ public class SmsService {
 
     public String generateCode() {
         //nnn nnn - pattern
-        Random random = new Random();
         StringBuilder sb = new StringBuilder();
         while (sb.length() < 6) {
-            sb.append(random.nextInt(9));
+            sb.append(new SecureRandom().nextInt(9));
         }
         sb.insert(3, " ");
         return sb.toString();

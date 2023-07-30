@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/books/author", method = {RequestMethod.GET, RequestMethod.POST})
 @RequiredArgsConstructor
 public class AuthorBookPageController {
 
@@ -29,7 +28,7 @@ public class AuthorBookPageController {
                 .build());
     }
 
-    @GetMapping(value = "/{authorSlug}")
+    @GetMapping(value = "/books/author/{authorSlug}")
     public String booksByAuthorPage(@PathVariable(value = "authorSlug") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
         AuthorDTO author = authorService.findBySlug(aSlug.getName());
         aModel.addAttribute("authorDTO", author);
@@ -38,7 +37,7 @@ public class AuthorBookPageController {
     }
 
     @ResponseBody
-    @PostMapping(value = "/{authorId}", params = {"offset", "limit"})
+    @PostMapping(value = "/books/author/{authorId}", params = {"offset", "limit"})
     public BooksPageDTO getBooksByAuthorPage(
             @PathVariable(value = "authorId", required = false) Long aAuthorId,
             @RequestParam("offset") Integer aOffset,

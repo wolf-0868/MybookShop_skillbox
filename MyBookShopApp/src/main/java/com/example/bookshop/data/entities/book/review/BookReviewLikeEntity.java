@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Table(name = "book_review_like")
@@ -13,7 +14,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class BookReviewLikeEntity {
+public class BookReviewLikeEntity implements Serializable {
+
+    private static final long serialVersionUID = -5730802696081853703L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

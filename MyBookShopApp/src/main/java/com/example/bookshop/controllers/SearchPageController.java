@@ -6,16 +6,18 @@ import com.example.bookshop.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value = "/search", method = RequestMethod.GET)
 @RequiredArgsConstructor
 public class SearchPageController {
 
     private final BookService bookService;
 
-    @GetMapping(value = {"", "/{searchWord}"})
+    @GetMapping(value = {"/search", "/search/{searchWord}"})
     public String searchPage(
             @PathVariable(value = "searchWord") SearchWordDTO aSearchWord,
             Model aModel) {
@@ -25,7 +27,7 @@ public class SearchPageController {
     }
 
     @ResponseBody
-    @GetMapping(value = "/page/{searchWord}")
+    @GetMapping(value = "/search/page/{searchWord}")
     public BooksPageDTO getNextSearchPage(
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit,

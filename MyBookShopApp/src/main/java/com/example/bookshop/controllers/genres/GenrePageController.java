@@ -8,13 +8,14 @@ import com.example.bookshop.services.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
-@RequestMapping(value = "/genres", method = RequestMethod.GET)
 @RequiredArgsConstructor
 public class GenrePageController {
 
@@ -33,17 +34,17 @@ public class GenrePageController {
                 .collect(Collectors.groupingBy(g -> g)));
     }
 
-    @GetMapping(value = {"", "/index"})
+    @GetMapping(value = {"/genres", "/genres/index"})
     public String indexPage() {
         return "genres/index";
     }
 
-    @GetMapping(value = "/slug")
+    @GetMapping(value = "/genres/slug")
     public String slugPage() {
         return "genres/slug";
     }
 
-    @GetMapping(value = "/{genreSlug}")
+    @GetMapping(value = "/genres/{genreSlug}")
     public String getBooksByGenrePage(@PathVariable(value = "genreSlug") SlugDTO aSlug, Model aModel) throws DataNotFoundException {
         GenreDTO genre = genreService.findBySlug(aSlug.getName());
         aModel.addAttribute("genreDTO", genre);

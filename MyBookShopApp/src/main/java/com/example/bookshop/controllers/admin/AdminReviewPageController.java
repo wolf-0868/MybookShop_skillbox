@@ -1,5 +1,6 @@
 package com.example.bookshop.controllers.admin;
 
+import com.example.bookshop.controllers.ControllerUtilities;
 import com.example.bookshop.data.dto.ReviewDTO;
 import com.example.bookshop.services.admin.AdminReviewService;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequiredArgsConstructor
 public class AdminReviewPageController {
+
+    private static final String ADMIN_REVIEWS_URL = "/admin/reviews";
 
     private final AdminReviewService adminReviewService;
 
@@ -37,26 +40,22 @@ public class AdminReviewPageController {
                 aModel.addAttribute("keyword", aKeyword);
             }
             aModel.addAttribute("reviews", pageReviews.getContent());
-            aModel.addAttribute("currentPage", pageReviews.getNumber() + 1);
-            aModel.addAttribute("totalItems", pageReviews.getTotalElements());
-            aModel.addAttribute("totalPages", pageReviews.getTotalPages());
-            aModel.addAttribute("pageSize", pageReviews.getSize());
-
+            Utilities.addPageableAttributes(aModel, pageReviews);
         } catch (Exception e) {
-            aModel.addAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aModel, e.getMessage());
         }
-        return "/admin/reviews";
+        return ADMIN_REVIEWS_URL;
     }
 
     @GetMapping(value = "/admin/reviews/delete/{id}")
     public String deleteReviews(@PathVariable("id") Long aId, RedirectAttributes aRedirectAttributes) {
         try {
             adminReviewService.deleteReviewById(aId);
-            aRedirectAttributes.addFlashAttribute("message", "The Review with id=" + aId + " has been deleted successfully!");
+            Utilities.addMessageAttribute(aRedirectAttributes, "The Review with id=" + aId + " has been deleted successfully!");
         } catch (Exception e) {
-            aRedirectAttributes.addFlashAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
         }
-        return "redirect:/admin/reviews";
+        return ControllerUtilities.REDIRECT + ADMIN_REVIEWS_URL;
     }
 
 }

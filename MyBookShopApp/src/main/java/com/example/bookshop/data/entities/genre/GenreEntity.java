@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,7 +16,9 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-public class GenreEntity {
+public class GenreEntity implements Serializable {
+
+    private static final long serialVersionUID = -8504329118918170411L;
 
     @Id
     @EqualsAndHashCode.Include

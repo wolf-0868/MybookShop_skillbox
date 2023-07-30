@@ -19,7 +19,7 @@ public class Book2UserService {
     private final BookRepository bookRepository;
     private final Book2UserRepository book2UserRepository;
 
-    public EnumSet<BookBindingType> findBindingTypesByBookForUser(long aBookId, long aUserId) {
+    public Set<BookBindingType> findBindingTypesByBookForUser(long aBookId, long aUserId) {
         Set<BookBindingType> types = book2UserRepository.getAllBindingTypesByBook(aUserId, aBookId);
         return types.isEmpty() ? EnumSet.noneOf(BookBindingType.class) : EnumSet.copyOf(types);
     }

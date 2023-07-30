@@ -31,7 +31,7 @@ public class ProfilePageController {
     public ConfirmationResponse handlePaymentBalance(@RequestBody PaymentBalancePayload aPayload) throws UserNotFountException, TransactionException {
         transactionService.transactionBalance(bookshopUserRegistrar.getCurrentIdUser(), aPayload.getSum());
         ConfirmationResponse response = new ConfirmationResponse();
-        response.setResult("true");
+        response.setResult(true);
         return response;
     }
 

@@ -11,14 +11,18 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@SuppressWarnings("java:S1874")
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private static final String SIGNIP_PAGE = "/signin";
 
     private final BookshopUserDetailsService bookshopUserDetailsService;
     private final JWTRequestFilter filter;
@@ -42,22 +46,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity aHttp) throws Exception {
         aHttp
-                .csrf()
-                .disable()
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests()
                 .antMatchers("/my", "/profile", "/cart", "/postponed")
                 .authenticated()
-//                .hasRole("USER")
                 .antMatchers("/**")
                 .permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/signin")
-                .failureUrl("/signin")
+                .loginPage(SIGNIP_PAGE)
+                .failureUrl(SIGNIP_PAGE)
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/signin")
+                .logoutSuccessUrl(SIGNIP_PAGE)
                 .logoutSuccessHandler(new CustomLogoutSuccessHandler())
                 .deleteCookies("token")
                 .and()
@@ -65,7 +67,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .oauth2Client();
 
-//        aHttp.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         aHttp.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
     }
 

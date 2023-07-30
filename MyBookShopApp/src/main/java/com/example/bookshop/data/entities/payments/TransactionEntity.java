@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Table(name = "balance_transaction")
@@ -14,7 +15,9 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class TransactionEntity {
+public class TransactionEntity implements Serializable {
+
+    private static final long serialVersionUID = -1188686095710351562L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

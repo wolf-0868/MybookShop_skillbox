@@ -1,5 +1,6 @@
 package com.example.bookshop.controllers.admin;
 
+import com.example.bookshop.controllers.ControllerUtilities;
 import com.example.bookshop.data.dto.drafts.DraftBookDTO;
 import com.example.bookshop.exceptions.BookshopException;
 import com.example.bookshop.services.admin.AdminBookService;
@@ -23,6 +24,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AdminBooksPageController {
 
+    private static final String ADMIN_BOOKS_URL = "/admin/books";
+
     private final AdminBookService adminBookService;
 
     @GetMapping(value = {"/admin/books", "/admin"})
@@ -42,15 +45,12 @@ public class AdminBooksPageController {
                 aModel.addAttribute("keyword", aKeyword);
             }
             aModel.addAttribute("books", pageBooks.getContent());
-            aModel.addAttribute("currentPage", pageBooks.getNumber() + 1);
-            aModel.addAttribute("totalItems", pageBooks.getTotalElements());
-            aModel.addAttribute("totalPages", pageBooks.getTotalPages());
-            aModel.addAttribute("pageSize", pageBooks.getSize());
+            Utilities.addPageableAttributes(aModel, pageBooks);
 
         } catch (Exception e) {
-            aModel.addAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aModel, e.getMessage());
         }
-        return "/admin/books";
+        return ADMIN_BOOKS_URL;
     }
 
     @GetMapping(value = "/admin/books/new")
@@ -66,11 +66,11 @@ public class AdminBooksPageController {
     public String saveBookFormPage(DraftBookDTO aBook, RedirectAttributes aRedirectAttributes) {
         try {
             adminBookService.saveBook(aBook);
-            aRedirectAttributes.addFlashAttribute("message", "The Book has been saved successfully!");
+            Utilities.addMessageAttribute(aRedirectAttributes, "The Book has been saved successfully!");
         } catch (BookshopException e) {
-            aRedirectAttributes.addAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
         }
-        return "redirect:/admin/books";
+        return ControllerUtilities.REDIRECT + ADMIN_BOOKS_URL;
     }
 
     @GetMapping(value = "/admin/books/edit/{id}")
@@ -82,8 +82,8 @@ public class AdminBooksPageController {
 
             return "/admin/book_form";
         } catch (BookshopException e) {
-            aRedirectAttributes.addFlashAttribute("message", e.getMessage());
-            return "redirect:/admin/books";
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
+            return ControllerUtilities.REDIRECT + ADMIN_BOOKS_URL;
         }
     }
 
@@ -91,11 +91,11 @@ public class AdminBooksPageController {
     public String deleteBook(@PathVariable("id") Long aId, RedirectAttributes aRedirectAttributes) {
         try {
             adminBookService.deleteBookById(aId);
-            aRedirectAttributes.addFlashAttribute("message", "The Book with id=" + aId + " has been deleted successfully!");
+            Utilities.addMessageAttribute(aRedirectAttributes, "The Book with id=" + aId + " has been deleted successfully!");
         } catch (Exception e) {
-            aRedirectAttributes.addFlashAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
         }
-        return "redirect:/admin/books";
+        return ControllerUtilities.REDIRECT + ADMIN_BOOKS_URL;
     }
 
     @PostMapping(value = "/admin/books/{id}/image/upload")
@@ -103,9 +103,9 @@ public class AdminBooksPageController {
         try {
             adminBookService.changeImageForBook(aFile, aId);
         } catch (IOException | BookshopException e) {
-            aRedirectAttributes.addFlashAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
         }
-        return "redirect:/admin/books/edit/" + aId.toString();
+        return ControllerUtilities.REDIRECT + ADMIN_BOOKS_URL + "edit/" + aId.toString();
     }
 
 }

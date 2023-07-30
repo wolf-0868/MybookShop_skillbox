@@ -1,5 +1,6 @@
 package com.example.bookshop.controllers.admin;
 
+import com.example.bookshop.controllers.ControllerUtilities;
 import com.example.bookshop.data.dto.drafts.DraftAuthorDTO;
 import com.example.bookshop.exceptions.BookshopException;
 import com.example.bookshop.services.admin.AdminAuthorService;
@@ -23,6 +24,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AdminAuthorPageController {
 
+    private static final String ADMIN_AUTHORS_URL = "/admin/authors";
+
     private final AdminAuthorService adminAuthorService;
 
     @GetMapping(value = "/admin/authors")
@@ -31,9 +34,8 @@ public class AdminAuthorPageController {
             @RequestParam(required = false, name = "keyword") String aKeyword,
             @RequestParam(defaultValue = "1", name = "page") int aPage,
             @RequestParam(defaultValue = "10", name = "size") int aSize) {
-        Page<DraftAuthorDTO> pageAuthors = null;
         Pageable paging = PageRequest.of(aPage - 1, aSize, Sort.by("id"));
-
+        Page<DraftAuthorDTO> pageAuthors;
         try {
             if (aKeyword == null) {
                 pageAuthors = adminAuthorService.getPageAuthors(paging);
@@ -42,15 +44,11 @@ public class AdminAuthorPageController {
                 aModel.addAttribute("keyword", aKeyword);
             }
             aModel.addAttribute("authors", pageAuthors.getContent());
-            aModel.addAttribute("currentPage", pageAuthors.getNumber() + 1);
-            aModel.addAttribute("totalItems", pageAuthors.getTotalElements());
-            aModel.addAttribute("totalPages", pageAuthors.getTotalPages());
-            aModel.addAttribute("pageSize", pageAuthors.getSize());
-
+            Utilities.addPageableAttributes(aModel, pageAuthors);
         } catch (Exception e) {
-            aModel.addAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aModel, e.getMessage());
         }
-        return "/admin/authors";
+        return ADMIN_AUTHORS_URL;
     }
 
     @GetMapping(value = "/admin/authors/new")
@@ -61,16 +59,15 @@ public class AdminAuthorPageController {
         return "/admin/author_form";
     }
 
-
     @PostMapping(value = "/admin/authors/save")
     public String saveAuthorFormPage(DraftAuthorDTO aAuthor, RedirectAttributes aRedirectAttributes) {
         try {
             adminAuthorService.saveAuthor(aAuthor);
-            aRedirectAttributes.addFlashAttribute("message", "The Author has been saved successfully!");
+            Utilities.addMessageAttribute(aRedirectAttributes, "The Author has been saved successfully!");
         } catch (BookshopException e) {
-            aRedirectAttributes.addAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
         }
-        return "redirect:/admin/authors";
+        return ControllerUtilities.REDIRECT + ADMIN_AUTHORS_URL;
     }
 
     @GetMapping(value = "/admin/authors/edit/{id}")
@@ -81,8 +78,8 @@ public class AdminAuthorPageController {
 
             return "/admin/author_form";
         } catch (BookshopException e) {
-            aRedirectAttributes.addFlashAttribute("message", e.getMessage());
-            return "redirect:/admin/authors";
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
+            return ControllerUtilities.REDIRECT + ADMIN_AUTHORS_URL;
         }
     }
 
@@ -90,11 +87,11 @@ public class AdminAuthorPageController {
     public String deleteAuthor(@PathVariable("id") Long aId, RedirectAttributes aRedirectAttributes) {
         try {
             adminAuthorService.deleteAuthorById(aId);
-            aRedirectAttributes.addFlashAttribute("message", "The Author with id=" + aId + " has been deleted successfully!");
+            Utilities.addMessageAttribute(aRedirectAttributes, "The Author with id=" + aId + " has been deleted successfully!");
         } catch (Exception e) {
-            aRedirectAttributes.addFlashAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
         }
-        return "redirect:/admin/authors";
+        return ControllerUtilities.REDIRECT + ADMIN_AUTHORS_URL;
     }
 
     @PostMapping(value = "/admin/authors/{id}/image/upload")
@@ -102,9 +99,9 @@ public class AdminAuthorPageController {
         try {
             adminAuthorService.changeImageForAuthor(aFile, aId);
         } catch (IOException | BookshopException e) {
-            aRedirectAttributes.addFlashAttribute("message", e.getMessage());
+            Utilities.addMessageAttribute(aRedirectAttributes, e.getMessage());
         }
-        return "redirect:/admin/authors/edit/" + aId.toString();
+        return ControllerUtilities.REDIRECT + ADMIN_AUTHORS_URL + "/edit/" + aId.toString();
     }
 
 }

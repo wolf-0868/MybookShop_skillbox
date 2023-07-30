@@ -15,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,11 +48,7 @@ public class BookshopUserRegistrar {
 
     public ConfirmationResponse jwtLogin(LoginPassConfirmationPayload aPayload) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(aPayload.getLogin(), aPayload.getPassword()));
-        UserDetails userDetails = bookshopUserDetailsService.loadUserByUsername(aPayload.getLogin());
-        String jwtToken = jwtUtil.generateToken(userDetails);
-        ConfirmationResponse response = new ConfirmationResponse();
-        response.setResult(jwtToken);
-        return response;
+        return new ConfirmationResponse(jwtUtil.generateToken(bookshopUserDetailsService.loadUserByUsername(aPayload.getLogin())));
     }
 
     public ConfirmationResponse jwtLoginByPhoneNumber(ContactConfirmationPayload aPayload) {
@@ -61,11 +56,7 @@ public class BookshopUserRegistrar {
         draft.setPhone(aPayload.getContact());
         draft.setPassword(aPayload.getCode());
         registerNewUser(draft);
-        UserDetails userDetails = bookshopUserDetailsService.loadUserByUsername(aPayload.getContact());
-        String jwtToken = jwtUtil.generateToken(userDetails);
-        ConfirmationResponse response = new ConfirmationResponse();
-        response.setResult(jwtToken);
-        return response;
+        return new ConfirmationResponse(jwtUtil.generateToken(bookshopUserDetailsService.loadUserByUsername(aPayload.getContact())));
     }
 
     public UserEntity getCurrentUserEntity() throws UserNotFountException {
@@ -103,15 +94,13 @@ public class BookshopUserRegistrar {
     }
 
     private void fillUserEntity(DraftUserDTO aDraftUserDTO, UserEntity aUserEntity) throws BookshopUserRegistrarException {
-        if (!aDraftUserDTO.getEmail()
-                .equals(aUserEntity.getEmail())) {
+        if (!aDraftUserDTO.getEmail().equals(aUserEntity.getEmail())) {
             if (userRepository.existsByEmail(aDraftUserDTO.getEmail())) {
                 throw new BookshopUserRegistrarException("Пользователь с почтой - '%s' уже зарегистрирован");
             }
             aUserEntity.setEmail(aDraftUserDTO.getEmail());
         }
-        if (!aDraftUserDTO.getPhone()
-                .equals(aUserEntity.getPhone())) {
+        if (!aDraftUserDTO.getPhone().equals(aUserEntity.getPhone())) {
             if (userRepository.existsByPhone(aDraftUserDTO.getPhone())) {
                 throw new BookshopUserRegistrarException("Пользователь с телефоном - '%s' уже зарегистрирован");
             }
