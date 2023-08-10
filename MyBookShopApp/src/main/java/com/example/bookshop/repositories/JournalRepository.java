@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Repository
 public interface JournalRepository extends JpaRepository<JournalEntity, Long> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM journal WHERE user_id = :user_id AND type = :#{#type?.ordinal()} AND datetime > :start_date AND datetime <= :end_date",
-            countQuery = "SELECT count(*) FROM journal WHERE user_id = :user_id AND type = :#{#type?.ordinal()} AND datetime > :start_date AND datetime <= :end_date")
+    @Query(nativeQuery = true, value = "SELECT DISTINCT ON (journal.book_id) * FROM journal WHERE user_id = :user_id AND type = :#{#type?.ordinal()} AND datetime > :start_date AND datetime <= :end_date",
+            countQuery = "SELECT DISTINCT ON (journal.book_id) count(*) FROM journal WHERE user_id = :user_id AND type = :#{#type?.ordinal()} AND datetime > :start_date AND datetime <= :end_date")
     Page<JournalEntity> getJournalEntries(
             @Param("start_date") LocalDateTime aStartDate,
             @Param("end_date") LocalDateTime aEndDate,

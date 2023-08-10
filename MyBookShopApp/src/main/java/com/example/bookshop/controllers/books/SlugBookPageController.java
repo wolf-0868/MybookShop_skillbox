@@ -5,6 +5,7 @@ import com.example.bookshop.data.dto.SlugDTO;
 import com.example.bookshop.data.dto.drafts.DraftBookReviewDTO;
 import com.example.bookshop.data.dto.page.BookStatusesPageDTO;
 import com.example.bookshop.data.dto.page.RatingBookPage;
+import com.example.bookshop.data.entities.enums.BookBindingType;
 import com.example.bookshop.data.payloads.ChangeBookStatusPayload;
 import com.example.bookshop.data.payloads.RateBookPayload;
 import com.example.bookshop.data.payloads.RateBookReviewPayload;
@@ -60,7 +61,7 @@ public class SlugBookPageController {
         if (aPayload.getBooksIds().isEmpty() || (aPayload.getStatus() == null)) {
             return response;
         }
-        if (aPayload.getBooksIds().size() == 1) {
+        if ((aPayload.getBooksIds().size() == 1) && (aPayload.getStatus() != BookBindingType.PAID)) {
             book2UserService.changeBookBindingType(aPayload.getBooksIds()
                     .iterator()
                     .next(), bookshopUserRegistrar.getCurrentIdUser(), aPayload.getStatus());

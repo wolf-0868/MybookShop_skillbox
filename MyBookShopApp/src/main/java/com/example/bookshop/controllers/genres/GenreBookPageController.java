@@ -6,8 +6,8 @@ import com.example.bookshop.services.BookService;
 import com.example.bookshop.services.GenreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -19,7 +19,7 @@ public class GenreBookPageController {
     private final BookService bookService;
 
     @ResponseBody
-    @PostMapping(value = "/books/genre/{genreId}", params = {"offset", "limit"})
+    @GetMapping(value = "/books/genre/{genreId}", params = {"offset", "limit"})
     public BooksPageDTO getBooksByGenrePage(
             @PathVariable(value = "genreId") Long aGenreId,
             @RequestParam("offset") Integer aOffset,

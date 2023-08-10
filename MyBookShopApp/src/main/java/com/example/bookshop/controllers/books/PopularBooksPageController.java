@@ -5,7 +5,10 @@ import com.example.bookshop.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class PopularBooksPageController {
     }
 
     @ResponseBody
-    @PostMapping(value = "/books/popular", params = {"offset", "limit"})
+    @GetMapping(value = "/books/popular", params = {"offset", "limit"})
     public BooksPageDTO getPopularBooksPage(
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) {

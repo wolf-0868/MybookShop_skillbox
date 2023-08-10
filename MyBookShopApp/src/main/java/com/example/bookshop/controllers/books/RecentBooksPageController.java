@@ -6,7 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDate;
 
@@ -27,7 +30,7 @@ public class RecentBooksPageController {
     }
 
     @ResponseBody
-    @PostMapping(value = "/books/recent", params = {"from", "to", "offset", "limit"})
+    @GetMapping(value = "/books/recent", params = {"from", "to", "offset", "limit"})
     public BooksPageDTO getRecentBooksPage(
             @RequestParam("from") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate aFromDate,
             @RequestParam("to") @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate aToDate,
@@ -37,7 +40,7 @@ public class RecentBooksPageController {
     }
 
     @ResponseBody
-    @PostMapping(value = "/books/recent", params = {"offset", "limit"})
+    @GetMapping(value = "/books/recent", params = {"offset", "limit"})
     public BooksPageDTO getRecentBooksPage(
             @RequestParam("offset") Integer aOffset,
             @RequestParam("limit") Integer aLimit) {
